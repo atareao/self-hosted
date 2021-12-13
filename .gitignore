@@ -1,0 +1,6 @@
+.env
+traefik/acme.json
+traefik/traefik.yml
+traefik/users.txt
+filebrowser/filebrowser.db
+srv/*

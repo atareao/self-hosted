@@ -1,0 +1,33 @@
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          permanent: true
+  websecure:
+    address: ":443"
+
+serversTransport:
+  maxIdleConnsPerHost: 1
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: proxy
+
+log:
+  level: INFO
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: tucorreo@electronico.es
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web

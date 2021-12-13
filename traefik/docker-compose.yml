@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v2.5.4
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/traefik.yml:ro
+      - ./users.txt:/users.txt:ro
+      - ./acme.json:/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.basicauth.basicauth.usersfile=/users.txt
+      - traefik.http.routers.traefik-secure.entrypoints=websecure
+      - traefik.http.routers.traefik-secure.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.traefik-secure.middlewares=basicauth
+      - traefik.http.routers.traefik-secure.tls=true
+      - traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.traefik-secure.service=api@internal
+
+
+networks:
+  proxy:
+    external: true
