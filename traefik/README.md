@@ -8,4 +8,6 @@ mv sample.traefik.yml traefik.yml
 mv sample.users.txt users.txt
 touch acme.json
 htpasswd -nb usuario contraseña >> users.txt
+docker-compose up -d
+docker-compose logs -f
 ```
