@@ -1,7 +1,7 @@
 # Installation
 
 ```
-git clone git@github.com:atareao/self-hosted.git
+git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/traefik
 mv sample.env .env
 mv sample.traefik.yml traefik.yml
