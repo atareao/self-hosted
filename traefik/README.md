@@ -3,10 +3,10 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/traefik
-mv sample.env .env
-mv sample.traefik.yml traefik.yml
-mv sample.users.txt users.txt
+cp sample.env .env
+cp sample.traefik.yml traefik.yml
 touch acme.json
+chmod 600 acme.json
 htpasswd -nb usuario contraseña >> users.txt
 docker-compose up -d
 docker-compose logs -f
