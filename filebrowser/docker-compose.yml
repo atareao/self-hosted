@@ -15,7 +15,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.filebrowser-secure.entrypoints=websecure
-      - traefik.http.routers.filebrowser-secure.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.filebrowser-secure.rule=Host(`${FQDN}`)
       - traefik.http.routers.filebrowser-secure.tls=true
       - traefik.http.routers.filebrowser-secure.tls.certresolver=letsencrypt
 
