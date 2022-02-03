@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+
+  uptime_kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime_kuma
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.uptime_kuma.loadbalancer.server.port=3001
+      - traefik.http.routers.uptime_kuma-secure.entrypoints=https
+      - traefik.http.routers.uptime_kuma-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.uptime_kuma-secure.tls=true
+      - traefik.http.routers.uptime_kuma-secure.tls.certresolver=myresolver
+
+networks:
+  proxy:
+    external: true
