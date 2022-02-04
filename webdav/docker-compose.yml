@@ -1,6 +1,7 @@
 version: '3'
 services:
   webdav:
+    build: .
     image: atareao/webdav:v1.1
     container_name: webdav
     restart: unless-stopped

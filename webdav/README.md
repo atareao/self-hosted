@@ -1,15 +1,26 @@
-# Installation
+# Servidor webdav partiendo de alpine
 
-⚠ First! Change `user` and `password` in `docker-compose`
+##  Clonar el repositorio
 
 ```
-git clone git@github.com:atareao/self-hosted.git
-cd self-hosted/webdav
-sed -i "s/user/your-user/" docker-compose.yml
-sed -i "s/passwd/your-password/" docker-compose.yml
+git clone https://github.com/atareao/docker-webdav.git
+```
+
+y accedemos al interior de la carpeta:
+
+```
+cd docker-webdav
+```
+
+## Crea el directorio
+
+Tienes que crear el directorio y añadir todos los archivos y subdirectorios que quieras compartir,
+
+```
 mkdir share
-docker-compose up -d
-docker-compose logs -f
 ```
 
-After this, open webbrowser at `http://localhost:8080`, and use `user` and `password` as configured.
+USERNAME: user
+PASSWORD: passwd
+
+Ya puedes acceder a través de `http://localhost:8080`
