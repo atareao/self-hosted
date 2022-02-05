@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  nginx:
+    networks:
+      - caddy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8080}}"
+
+networks:
+  caddy:
+    external: true
