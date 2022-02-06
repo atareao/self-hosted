@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  filebrowser:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.filebrowser.loadbalancer.server.port=80
+      - traefik.http.routers.filebrowser.entrypoints=web
+      - traefik.http.routers.filebrowser.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.filebrowser-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.filebrowser.middlewares=filebrowser-https-redirect
+      - traefik.http.routers.filebrowser-secure.entrypoints=websecure
+      - traefik.http.routers.filebrowser-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.filebrowser-secure.tls=true
+      - traefik.http.routers.filebrowser-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+
