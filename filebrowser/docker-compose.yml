@@ -6,19 +6,7 @@ services:
     container_name: filebrowser
     restart: unless-stopped
     user: ${UID}:${GID}
-    networks:
-      - proxy
     volumes:
       - ./srv:/srv
       - ./filebrowser.db:/database.db
       - ./filebrowser.json:/.filebrowser.json
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.filebrowser-secure.entrypoints=websecure
-      - traefik.http.routers.filebrowser-secure.rule=Host(`${FQDN}`)
-      - traefik.http.routers.filebrowser-secure.tls=true
-      - traefik.http.routers.filebrowser-secure.tls.certresolver=letsencrypt
-
-networks:
-  proxy:
-    external: true
