@@ -5,7 +5,7 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.services.grafana.loadbalancer.server.port=8080
+      - traefik.http.services.nginx.loadbalancer.server.port=8080
       - traefik.http.routers.nginx.entrypoints=web
       - traefik.http.routers.nginx.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.nginx-https-redirect.redirectscheme.scheme=https
