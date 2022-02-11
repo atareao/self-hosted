@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12-alpine
+    container_name: db
+    hostname: db
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-freshrss}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-freshrss}
+      POSTGRES_DB: ${POSTGRES_DB:-freshrss}
+    networks:
+      - internal
+
+  freshrss:
+    depends_on:
+      - db
+    networks:
+      - internal
+
+volumes:
+  db:
+
+networks:
+  internal:

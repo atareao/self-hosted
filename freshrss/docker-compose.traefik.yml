@@ -1,0 +1,20 @@
+version: '3'
+services:
+  freshrss:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.freshrss.loadbalancer.server.port=80
+      - traefik.http.routers.freshrss.entrypoints=web
+      - traefik.http.routers.freshrss.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.freshrss-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.freshrss.middlewares=freshrss-https-redirect
+      - traefik.http.routers.freshrss-secure.entrypoints=websecure
+      - traefik.http.routers.freshrss-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.freshrss-secure.tls=true
+      - traefik.http.routers.freshrss-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
