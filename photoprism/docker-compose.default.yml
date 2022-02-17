@@ -1,0 +1,7 @@
+version: '3.5'
+
+services:
+
+  photoprism:
+    ports:
+      - 2342:2342 # [local port]:[container port]
