@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+
+  photoprism:
+    image: photoprism/photoprism:latest
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    healthcheck: # Optional
+      test: "photoprism status"
+      interval: 60s
+      timeout: 15s      retries: 5
+
+    volumes:
+      - ./Pictures:/photoprism/originals
+      - ./Storage:/photoprism/storage    # Settings, index, sidecar and thumbnails
+      - ./Import:/photoprism/import      # Mounting the import folder is optional
