@@ -3,24 +3,22 @@
 ##  Clonar el repositorio
 
 ```
-git clone https://github.com/atareao/docker-webdav.git
-```
-
-y accedemos al interior de la carpeta:
-
-```
-cd docker-webdav
-```
-
-## Crea el directorio
-
-Tienes que crear el directorio y añadir todos los archivos y subdirectorios que quieras compartir,
-
-```
+git clone https://github.com/atareao/self-hosted.git
+cd self-hosted/webdav
 mkdir share
+cp sample.env .env
 ```
 
-USERNAME: user
-PASSWORD: passwd
+If you want to work with Traefik,
 
-Ya puedes acceder a través de `http://localhost:8080`
+```
+docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
+docker-compose logs -f
+```
+
+If you want to work with Caddy,
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
+docker-compose logs -f
+```
