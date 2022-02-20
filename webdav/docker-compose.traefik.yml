@@ -1,6 +1,6 @@
 version: '3'
 services:
-  nginx:
+  webdav:
     networks:
       - proxy
     labels:
