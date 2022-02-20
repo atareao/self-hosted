@@ -7,6 +7,7 @@ git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/webdav
 mkdir share
 cp sample.env .env
+htpasswd -bc htpasswd tu-usuario$USERNAME tu-contraseña
 ```
 
 If you want to work with Traefik,

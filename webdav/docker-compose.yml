@@ -2,13 +2,9 @@ version: '3'
 services:
   webdav:
     build: .
-    image: atareao/webdav:v1.1
+    image: atareao/webdav:v2.0
     container_name: webdav
     restart: unless-stopped
-    ports:
-      - 8080:8080
     volumes:
       - ./share:/share
-    environment:
-      USERNAME: user
-      PASSWORD: passwd
+      - ./htpasswd:/opt/nginx/conf/.htpasswd
