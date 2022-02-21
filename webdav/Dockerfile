@@ -26,8 +26,8 @@ RUN apk add --update \
 
 FROM alpine:latest
 
-ARG UID=${UID:-1001}
-ARG GID=${GID:-1001}
+ARG UID=${UID:-1000}
+ARG GID=${GID:-1000}
 
 RUN apk add --update \
             --no-cache \
@@ -36,6 +36,7 @@ RUN apk add --update \
             libxslt \
             tini \
             shadow &&\
+    rm -rf /var/cache/apk && \
     groupmod -g $GID www-data && \
     adduser -u $UID -S www-data -G www-data && \
     mkdir /share
