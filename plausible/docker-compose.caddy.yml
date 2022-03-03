@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+  plausible:
+    labels:
+      - caddy="plausible.tuservidor.com"
+      - caddy.reverse_proxy="{{upstreams 8000}}"
