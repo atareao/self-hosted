@@ -1,18 +1,18 @@
-FROM alpine AS builder
+FROM alpine:3.15 AS builder
 RUN apk add --update \
             --no-cache \
-            pcre \
-            libxml2 \
-            libxslt \
-            gcc \
-            make \
-            libc-dev \
-            pcre-dev \
-            zlib-dev \
-            libxml2-dev \
-            libxslt-dev && \
+            pcre~=8.45 \
+            libxml2~=2.9 \
+            libxslt~=1.1 \
+            gcc~=10.3 \
+            make~=4.3 \
+            libc-dev~=0.7 \
+            pcre-dev~=8.45 \
+            zlib-dev~=1.2 \
+            libxml2-dev~=2.9 \
+            libxslt-dev~=1.1 && \
     cd /tmp && \
-    wget https://github.com/nginx/nginx/archive/master.zip -O nginx.zip && \
+    wget -q https://github.com/nginx/nginx/archive/master.zip -O nginx.zip && \
     unzip nginx.zip && \
     cd nginx-master && \
     ./auto/configure --prefix=/opt/nginx && \
@@ -21,18 +21,18 @@ RUN apk add --update \
     apk del gcc make libc-dev pcre-dev zlib-dev libxml2-dev libxslt-dev && \
     rm -rf /var/cache/apk
 
-FROM alpine:latest
+FROM alpine:3.15
 
 ARG UID=${UID:-1000}
 ARG GID=${GID:-1000}
 
 RUN apk add --update \
             --no-cache \
-            pcre \
-            libxml2 \
-            libxslt \
-            tini \
-            shadow &&\
+            pcre~=8.45 \
+            libxml2~=2.9 \
+            libxslt~=1.1 \
+            tini~=0.19 \
+            shadow~=4.8 &&\
     rm -rf /var/cache/apk && \
     groupmod -g $GID www-data && \
     adduser -u $UID -S www-data -G www-data && \
