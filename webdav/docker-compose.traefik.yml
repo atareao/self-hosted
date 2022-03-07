@@ -5,15 +5,15 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.services.nginx.loadbalancer.server.port=8080
-      - traefik.http.routers.nginx.entrypoints=web
-      - traefik.http.routers.nginx.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.nginx-https-redirect.redirectscheme.scheme=https
-      - traefik.http.routers.nginx.middlewares=nginx-https-redirect
-      - traefik.http.routers.nginx-secure.entrypoints=websecure
-      - traefik.http.routers.nginx-secure.rule=Host(`${FQDN}`)
-      - traefik.http.routers.nginx-secure.tls=true
-      - traefik.http.routers.nginx-secure.tls.certresolver=letsencrypt
+      - traefik.http.services.webdav.loadbalancer.server.port=8080
+      - traefik.http.routers.webdav.entrypoints=web
+      - traefik.http.routers.webdav.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.webdav-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.webdav.middlewares=webdav-https-redirect
+      - traefik.http.routers.webdav-secure.entrypoints=websecure
+      - traefik.http.routers.webdav-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.webdav-secure.tls=true
+      - traefik.http.routers.webdav-secure.tls.certresolver=letsencrypt
 
 networks:
   proxy:
