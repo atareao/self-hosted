@@ -2,7 +2,7 @@
 version: '3'
 
 services:
-  nginx:
+  filebrowser:
     networks:
       - proxy
     labels:
