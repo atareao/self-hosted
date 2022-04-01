@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+
+  ghost:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.ghost.loadbalancer.server.port=2368
+      - traefik.http.routers.ghost.entrypoints=http
+      - traefik.http.routers.ghost.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.ghost-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.ghost.middlewares=ghost-https-redirect
+      - traefik.http.routers.ghost-secure.entrypoints=https
+      - traefik.http.routers.ghost-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.ghost-secure.tls=true
+      - traefik.http.routers.ghost-secure.tls.certresolver=myresolver
+
+networks:
+  proxy:
+    external: true

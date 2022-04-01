@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+
+  ghost:
+    image: ghost:4-alpine
+    restart: unless-stopped
+    volumes:
+      - ./blog:/var/lig/ghost/content
+    environment:
+      - url=${FQDN}
