@@ -2,7 +2,7 @@ version: '3'
 services:
   nginx:
     build: .
-    image: atareao/nginx:v1.0
+    image: atareao/nginx:v2.0
     container_name: nginx
     restart: unless-stopped
     volumes:
