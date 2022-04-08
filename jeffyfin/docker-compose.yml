@@ -1,0 +1,14 @@
+version: '3'
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    restart: unless-stopped
+    user: 1000:1000
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ./media:/media
+      - ./media2:/media2:ro
+    environment:
+      - JELLYFIN_PublishedServerUrl=${FQDN}
