@@ -1,0 +1,15 @@
+
+version: '3.3'
+
+services:
+
+  uptime_kuma:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 3001}}"
+
+networks:
+  proxy:
+    external: true
