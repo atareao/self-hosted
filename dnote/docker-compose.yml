@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - internal
+    volumes:
+      - ./dnote_data:/var/lib/postgresql/data
+    restart: always
+
+  dnote:
+    image: dnote/dnote:latest
+    environment:
+      GO_ENV: PRODUCTION
+      DBSkipSSL: "true"
+      DBHost: postgres
+      DBPort: 5432
+      DBName: ${POSTGRES_DB}
+      DBUser: ${POSTGRES_USER}
+      DBPassword: ${POSTGRES_PASSWORD}
+      WebURL: ${FQDN}
+      OnPremise: "true"
+      SmtpHost:
+      SmtpPort:
+      SmtpUsername:
+      SmtpPassword:
+      DisableRegistration: "true"
+    depends_on:
+      - postgres
+    restart: always
+    networks:
+      - internal
+
+networks:
+  internal:
