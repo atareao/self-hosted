@@ -29,7 +29,7 @@ services:
       SmtpPort:
       SmtpUsername:
       SmtpPassword:
-      DisableRegistration: "true"
+      DisableRegistration: "false"
     depends_on:
       - postgres
     restart: always
