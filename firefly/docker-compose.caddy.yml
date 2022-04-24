@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+
+  fireflyiii:
+    networks:
+      - proxy
+    labels:
+      - caddy="${APP_URL}"
+      - caddy.reverse_proxy="{{upstreams 8080}}"
+
+networks:
+  proxy:
+    external: true
