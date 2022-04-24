@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  radicale:
+    ports:
+      - 5232:5232

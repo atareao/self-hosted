@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  radicale:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.dnote.loadbalancer.server.port=5232
+      - traefik.http.routers.expulsabot.entrypoints=http
+      - traefik.http.routers.expulsabot.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.expulsabot-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.expulsabot.middlewares=expulsabot-https-redirect
+      - traefik.http.routers.expulsabot-secure.entrypoints=https
+      - traefik.http.routers.expulsabot-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.expulsabot-secure.tls=true
+      - traefik.http.routers.expulsabot-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+

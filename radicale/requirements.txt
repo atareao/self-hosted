@@ -1,0 +1,3 @@
+radicale==3.1.7
+radicale-imap
+git+https://github.com/Unrud/RadicaleInfCloud

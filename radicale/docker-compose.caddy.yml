@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  radicale:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5232}}"
+
+networks:
+  proxy:
+    external: true
+
