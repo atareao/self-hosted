@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+
+  fireflyiii:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.firefly.loadbalancer.server.port=8080
+      - traefik.http.routers.firefly.entrypoints=http
+      - traefik.http.routers.firefly.rule=Host(`${APP_URL}`)
+      - traefik.http.middlewares.firefly-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.firefly.middlewares=firefly-https-redirect
+      - traefik.http.routers.firefly-secure.entrypoints=https
+      - traefik.http.routers.firefly-secure.rule=Host(`${APP_URL}`)
+      - traefik.http.routers.firefly-secure.tls=true
+      - traefik.http.routers.firefly-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true

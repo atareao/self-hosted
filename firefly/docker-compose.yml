@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+
+  fireflyiii:
+    image: fireflyiii/core:latest
+    container_name: fireflyiii
+    restart: unless-stopped
+    volumes:
+      - ./firefly_upload:/var/www/html/storage/upload
+    env_file:
+      - .env
+    depends_on:
+      - db_for_firefly
+    networks:
+      - internal
+
+  db_for_firefly:
+    image: yobasystems/alpine-mariadb:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - ./firefly_db:/var/lib/mysql
+    networks:
+      - internal
+
+  croni_for_firefly:
+    image: atareao/croni:v1.1
+    container_name: croni
+    volumes:
+      - ./crontab:/crontab
+    env_file:
+      - croni.env
+    networks:
+      - internal
+
+
+networks:
+  internal:
