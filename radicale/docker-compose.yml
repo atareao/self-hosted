@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  radicale:
+    build: ./
+    image: atareao/radicale:v1.0
+    container_name: radicale
+    restart: unless-stopped
+    volumes:
+      - ./.htpasswd-users:/app/.htpasswd-users
+      - ./data:/app/data
