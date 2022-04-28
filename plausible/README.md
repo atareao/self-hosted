@@ -11,7 +11,7 @@ sed -i "s/plausible.tuservidor.com/el_fqdn_que_quieras/g" plausible-conf.env
 Levanta el servicio utilizando Traefik,
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.traefil.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 ```
 
 O levanta el servicio utilizando Caddy,
