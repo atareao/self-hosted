@@ -22,3 +22,7 @@ docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 docker-compose logs -f
 ```
 
+Default credentials:
+
+  * username: admin@admin.com
+  * password: password
