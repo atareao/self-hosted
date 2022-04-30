@@ -4,7 +4,7 @@
 # This setting is currently only used by the attachments and e-mail sending feature (outgoing mail only).
 #
 # base-url:
-base-url: ntfy.tuservidor.es
+base-url: "https://ntfy.tuservidor.es"
 
 # Listen address for the HTTP & HTTPS web server. If "listen-https" is set, you must also
 # set "key-file" and "cert-file". Format: [<ip>]:<port>, e.g. "1.2.3.4:8080".
