@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  ntfy:
+    build: .
+    image: atareao/ntfy:v1.0
+    networks:
+      - proxy
+    volumes:
+      - ./etc:/etc/ntfy
