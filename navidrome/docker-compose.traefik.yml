@@ -7,14 +7,14 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.navidrome.loadbalancer.server.port=4533
-      - traefik.http.routers.navidrome.entrypoints=http
+      - traefik.http.routers.navidrome.entrypoints=web
       - traefik.http.routers.navidrome.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.navidrome-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.navidrome.middlewares=navidrome-https-redirect
-      - traefik.http.routers.navidrome-secure.entrypoints=https
+      - traefik.http.routers.navidrome-secure.entrypoints=websecure
       - traefik.http.routers.navidrome-secure.rule=Host(`${FQDN}`)
       - traefik.http.routers.navidrome-secure.tls=true
-      - traefik.http.routers.navidrome-secure.tls.certresolver=myresolver
+      - traefik.http.routers.navidrome-secure.tls.certresolver=letsencrypt
 
 networks:
   proxy:
