@@ -17,10 +17,10 @@ services:
       - org.label-schema.group=monitoring
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - traefik.http.routers.grafana-secure.entrypoints=https
+      - traefik.http.routers.grafana-secure.entrypoints=websecure
       - traefik.http.routers.grafana-secure.rule=Host(`${GRAFANA_FQDN}`)
       - traefik.http.routers.grafana-secure.tls=true
-      - traefik.http.routers.grafana-secure.tls.certresolver=myresolver
+      - traefik.http.routers.grafana-secure.tls.certresolver=letsencrypt
 
   influxdb:
     image: influxdb:latest
@@ -34,10 +34,10 @@ services:
       - org.label-schema.group=monitoring
       - traefik.enable=true
       - traefik.http.services.influxdb.loadbalancer.server.port=8086
-      - traefik.http.routers.influxdb-secure.entrypoints=https
+      - traefik.http.routers.influxdb-secure.entrypoints=websecure
       - traefik.http.routers.influxdb-secure.rule=Host(`${INFLUXDB_FQDN}`)
       - traefik.http.routers.influxdb-secure.tls=true
-      - traefik.http.routers.influxdb-secure.tls.certresolver=myresolver
+      - traefik.http.routers.influxdb-secure.tls.certresolver=letsencrypt
     networks:
       - proxy
       - monitoring
