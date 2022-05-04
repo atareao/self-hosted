@@ -9,7 +9,7 @@ services:
       - traefik.http.services.navidrome.loadbalancer.server.port=4533
       - traefik.http.routers.navidrome.entrypoints=web
       - traefik.http.routers.navidrome.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.navidrome-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.navidrome-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.navidrome.middlewares=navidrome-https-redirect
       - traefik.http.routers.navidrome-secure.entrypoints=websecure
       - traefik.http.routers.navidrome-secure.rule=Host(`${FQDN}`)

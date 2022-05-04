@@ -7,11 +7,11 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.dnote.loadbalancer.server.port=3000
-      - traefik.http.routers.dnote.entrypoints=http
+      - traefik.http.routers.dnote.entrypoints=web
       - traefik.http.routers.dnote.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.dnote-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.dnote-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.dnote.middlewares=dnote-https-redirect
-      - traefik.http.routers.dnote-secure.entrypoints=https
+      - traefik.http.routers.dnote-secure.entrypoints=websecure
       - traefik.http.routers.dnote-secure.rule=Host(`${FQDN}`)
       - traefik.http.routers.dnote-secure.tls=true
       - traefik.http.routers.dnote-secure.tls.certresolver=letsencrypt

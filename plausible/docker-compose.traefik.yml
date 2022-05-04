@@ -4,12 +4,12 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.plausible.loadbalancer.server.port=8000
-      - traefik.http.routers.plausible.entrypoints=http
+      - traefik.http.routers.plausible.entrypoints=web
       - traefik.http.routers.plausible.rule=Host(`plausible.tuservidor.es`)
-      - traefik.http.middlewares.plausible-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.plausible-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.plausible.middlewares=plausible-https-redirect
-      - traefik.http.routers.plausible-secure.entrypoints=https
+      - traefik.http.routers.plausible-secure.entrypoints=websecure
       - traefik.http.routers.plausible-secure.rule=Host(`plausible.tuservidor.es`)
       - traefik.http.routers.plausible-secure.tls=true
-      - traefik.http.routers.plausible-secure.tls.certresolver=myresolver
+      - traefik.http.routers.plausible-secure.tls.certresolver=letsencrypt
 

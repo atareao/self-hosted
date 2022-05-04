@@ -8,7 +8,7 @@ services:
       - traefik.http.services.webdav.loadbalancer.server.port=8080
       - traefik.http.routers.webdav.entrypoints=web
       - traefik.http.routers.webdav.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.webdav-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.webdav-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.webdav.middlewares=webdav-https-redirect
       - traefik.http.routers.webdav-secure.entrypoints=websecure
       - traefik.http.routers.webdav-secure.rule=Host(`${FQDN}`)

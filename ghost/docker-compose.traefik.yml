@@ -8,14 +8,14 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.ghost.loadbalancer.server.port=2368
-      - traefik.http.routers.ghost.entrypoints=http
+      - traefik.http.routers.ghost.entrypoints=web
       - traefik.http.routers.ghost.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.ghost-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.ghost-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.ghost.middlewares=ghost-https-redirect
-      - traefik.http.routers.ghost-secure.entrypoints=https
+      - traefik.http.routers.ghost-secure.entrypoints=websecure
       - traefik.http.routers.ghost-secure.rule=Host(`${FQDN}`)
       - traefik.http.routers.ghost-secure.tls=true
-      - traefik.http.routers.ghost-secure.tls.certresolver=myresolver
+      - traefik.http.routers.ghost-secure.tls.certresolver=letsencrypt
 
 networks:
   proxy:

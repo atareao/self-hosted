@@ -8,7 +8,7 @@ services:
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - traefik.http.routers.jellyfin.entrypoints=web
       - traefik.http.routers.jellyfin.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.jellyfin-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.jellyfin.middlewares=jellyfin-https-redirect
       - traefik.http.routers.jellyfin-secure.entrypoints=websecure
       - traefik.http.routers.jellyfin-secure.rule=Host(`${FQDN}`)

@@ -10,7 +10,7 @@ services:
       - traefik.http.services.photoprism.loadbalancer.server.port=2342
       - traefik.http.routers.photoprism.entrypoints=web
       - traefik.http.routers.photoprism.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.photoprism-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.photoprism-https-redirect.redirectscheme.scheme=websecure
       - traefik.http.routers.photoprism.middlewares=photoprism-https-redirect
       - traefik.http.routers.photoprism-secure.entrypoints=websecure
       - traefik.http.routers.photoprism-secure.rule=Host(`${FQDN}`)
