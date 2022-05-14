@@ -1,0 +1,9 @@
+version: '3'
+services:
+  laverna:
+    build: .
+    image: atareao/laverna:v1.0
+    container_name: laverna
+    restart: unless-stopped
+    volumes:
+      - ./htpasswd:/opt/nginx/conf/htpasswd
