@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  laverna:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.laverna.loadbalancer.server.port=8080
+      - traefik.http.routers.laverna.entrypoints=web
+      - traefik.http.routers.laverna.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.laverna-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.laverna.middlewares=laverna-https-redirect
+      - traefik.http.routers.laverna-secure.entrypoints=websecure
+      - traefik.http.routers.laverna-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.laverna-secure.tls=true
+      - traefik.http.routers.laverna-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
