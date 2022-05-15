@@ -20,4 +20,9 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-mysteryshack -c /rs/config.ini user create $1
+USERNAME="$1"
+if [[ -n "$USERNAME" ]];then
+    /rs/mysteryshack -c /rs/config.ini user create $1
+else
+    echo "Please, tell me at less the username"
+fi
