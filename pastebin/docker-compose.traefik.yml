@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  pastebin:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.pastebin.loadbalancer.server.port=8081
+      - traefik.http.routers.pastebin.entrypoints=web
+      - traefik.http.routers.pastebin.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.pastebin-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.pastebin.middlewares=pastebin-https-redirect
+      - traefik.http.routers.pastebin-secure.entrypoints=websecure
+      - traefik.http.routers.pastebin-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.pastebin-secure.tls=true
+      - traefik.http.routers.pastebin-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
