@@ -15,13 +15,11 @@ RUN git clone https://github.com/mkaczanowski/pastebin.git . && \
 FROM debian:buster-slim
 RUN apt-get update --quiet && \
     apt-get install --quiet --yes --no-install-recommends \
-    gosu \
-    tini && \
+    gosu && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /rs/db
 COPY --from=builder /rs/target/release/pastebin /rs/pastebin
 COPY entrypoint.sh /rs/entrypoint.sh
 WORKDIR /rs
 
-ENTRYPOINT ["tini", "--"]
 CMD ["/bin/sh", "/rs/entrypoint.sh"]

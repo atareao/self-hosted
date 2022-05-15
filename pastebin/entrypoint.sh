@@ -24,10 +24,12 @@
 USER_ID=${LOCAL_UID:-1000}
 GROUP_ID=${LOCAL_GID:-1000}
 
-echo "Starting with UID: $USER_ID, GID: $GROUP_ID"
-useradd -u "$USER_ID" -o -m dockerus
-groupmod -g "$GROUP_ID" dockerus
-export HOME=/home/dockerus
+if ! id dockerus &>/dev/null; then
+    echo "Starting with UID: $USER_ID, GID: $GROUP_ID"
+    useradd --uid "$USER_ID" --non-unique dockerus
+    groupmod --gid "$GROUP_ID" dockerus
+    echo "User created"
+fi
 
 chown -R dockerus:dockerus /rs
 
