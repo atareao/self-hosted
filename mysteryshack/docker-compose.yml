@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  mysteryshack:
+    build: .
+    image: atareao/mysteryshack:v1.0
+    init: true
+    restart: always
+    volumes:
+      - ./data:/rs/data
