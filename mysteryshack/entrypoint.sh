@@ -30,6 +30,7 @@ if ! id dockerus &>/dev/null; then
     groupmod --gid "$GROUP_ID" dockerus
     echo "User created"
 fi
+
 chown -R dockerus:dockerus /rs
 
 exec /usr/sbin/gosu dockerus /rs/mysteryshack -c /rs/config.ini serve
