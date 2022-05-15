@@ -7,18 +7,18 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.mysteryshack.loadbalancer.server.port=6767
-      - traefik.http.routers.mysteryshack.entrypoints=http
-      - traefik.http.routers.mysteryshack.rule=Host(`mysteryshack.territoriolinux.es`)
+      - traefik.http.routers.mysteryshack.entrypoints=web
+      - traefik.http.routers.mysteryshack.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.mysteryshack-https-redirect.redirectscheme.scheme=https
       - traefik.http.routers.mysteryshack.middlewares=dnote-https-redirect
-      - traefik.http.middlewares.mysteryshack.headers.customrequestheaders.X-Forwarded-Host=mysteryshack.territoriolinux.es
+      - traefik.http.middlewares.mysteryshack.headers.customrequestheaders.X-Forwarded-Host=${FQDN}
       - traefik.http.middlewares.mysteryshack.headers.customrequestheaders.X-Forwarded-Port=443
       - traefik.http.middlewares.mysteryshack.headers.customrequestheaders.X-Forwarded-For=172.16.0.0/12
       - traefik.http.middlewares.mysteryshack.headers.customrequestheaders.X-Forwarded-Proto=https
-      - traefik.http.routers.mysteryshack-secure.entrypoints=https
-      - traefik.http.routers.mysteryshack-secure.rule=Host(`mysteryshack.territoriolinux.es`)
+      - traefik.http.routers.mysteryshack-secure.entrypoints=websecure
+      - traefik.http.routers.mysteryshack-secure.rule=Host(`${FQDN}`)
       - traefik.http.routers.mysteryshack-secure.tls=true
-      - traefik.http.routers.mysteryshack-secure.tls.certresolver=myresolver
+      - traefik.http.routers.mysteryshack-secure.tls.certresolver=letsencrypt
 
 networks:
   proxy:
