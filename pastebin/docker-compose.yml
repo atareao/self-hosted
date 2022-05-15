@@ -5,3 +5,5 @@ services:
     image: atareao/pastebin:v1.0
     container_name: pastebin
     restart: unless-stopped
+    volumes:
+      - ./db:/rs/db

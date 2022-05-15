@@ -15,14 +15,12 @@ RUN git clone https://github.com/mkaczanowski/pastebin.git . && \
 FROM debian:buster-slim
 RUN apt-get update --quiet && \
     apt-get install --quiet --yes --no-install-recommends \
+    gosu \
     tini && \
     rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /rs/db && \
-    adduser --uid 1000 --system --no-create-home --group dockerus
+    mkdir -p /rs/db
 COPY --from=builder /rs/target/release/pastebin /rs/pastebin
 COPY entrypoint.sh /rs/entrypoint.sh
-RUN chown -R dockerus:dockerus /rs
-USER dockerus
 WORKDIR /rs
 
 ENTRYPOINT ["tini", "--"]

@@ -21,4 +21,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-/rs/pastebin --address 0.0.0.0 --port 8081 --uri "${FQDN}" --db=/rs/db/
+USER_ID=${LOCAL_UID:-1000}
+GROUP_ID=${LOCAL_GID:-1000}
+
+echo "Starting with UID: $USER_ID, GID: $GROUP_ID"
+useradd -u "$USER_ID" -o -m dockerus
+groupmod -g "$GROUP_ID" dockerus
+export HOME=/home/dockerus
+
+chown -R dockerus:dockerus /rs
+
+exec /usr/sbin/gosu dockerus /rs/pastebin --address 0.0.0.0 --port 8081 --db=/rs/db/
