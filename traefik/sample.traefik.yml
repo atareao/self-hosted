@@ -11,6 +11,8 @@ entryPoints:
           permanent: true
   websecure:
     address: ":443"
+  git:
+    address: ":2222"
 
 serversTransport:
   maxIdleConnsPerHost: 1
