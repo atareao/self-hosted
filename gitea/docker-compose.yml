@@ -1,0 +1,71 @@
+version: "3"
+
+networks:
+  gitea:
+    external: false
+
+services:
+  gitea:
+    image: gitea/gitea:1.16.8
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+      - GITEA__repository__DEFAULT_BRANCH=main
+      - GITEA__repository__ENABLE_PUSH_CREATE_ORG=true
+      - GITEA__server__OFFLINE_MODE=true
+      - GITEA__server__DOMAIN=${FQDN}
+      - GITEA__server__SSH_DOMAIN=${FQDN}
+      - GITEA__server__ROOT_URL=https://${FQDN}
+      - GITEA__server__DISABLE_SSH=false
+      - GITEA__server__SSH_PORT=2222
+      - GITEA__server__SSH_LISTEN_PORT=22
+      - GITEA__service__DISABLE_REGISTRATION=true
+      - GITEA__service__REQUIRE_SIGNIN_VIEW=true
+      - GITEA__service__DEFAULT_ALLOW_CREATE_ORGANIZATION=false
+    restart: always
+    networks:
+      - internal
+      - proxy
+    volumes:
+      - ./data/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
+      - traefik.http.routers.gitea.entrypoints=web
+      - traefik.http.routers.gitea.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.gitea-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.gitea.middlewares=gitea-https-redirect
+      - traefik.http.routers.gitea-secure.entrypoints=websecure
+      - traefik.http.routers.gitea-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.gitea-secure.tls=true
+      - traefik.http.routers.gitea-secure.tls.certresolver=letsencrypt
+      - traefik.tcp.routers.gitea-ssh.entrypoints=git
+      - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
+      - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    networks:
+      - internal
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+networks:
+  internal:
+  proxy:
+    external: true
