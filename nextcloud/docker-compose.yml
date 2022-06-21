@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    env_file:
+      - db.env
+    networks:
+      - internal
+
+  redis:
+    image: redis:alpine
+    restart: always
+    networks:
+      - internal
+
+  app:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - ./nextcloud:/var/www/html
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_HOST=redis
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - internal
+
+  web:
+    build: ./web
+    restart: always
+    volumes:
+      - ./nextcloud:/var/www/html:ro
+    depends_on:
+      - app
+    networks:
+      - internal
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.nextcloud.loadbalancer.server.port=80
+      - traefik.http.routers.nextcloud.entrypoints=web
+      - traefik.http.routers.nextcloud.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect
+      - traefik.http.routers.nextcloud-secure.entrypoints=websecure
+      - traefik.http.routers.nextcloud-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.nextcloud-secure.tls=true
+      - traefik.http.routers.nextcloud-secure.tls.certresolver=letsencrypt
+
+  cron:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - ./nextcloud:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
+    networks:
+      - internal
+
+
+networks:
+  internal:
+  proxy:
+    external: true
