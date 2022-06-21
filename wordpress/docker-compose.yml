@@ -1,0 +1,67 @@
+---
+version: '3'
+services:
+  wpdb:
+    container_name: wpdb
+    image: mariadb
+    restart: unless-stopped
+    volumes:
+      - ./datadb:/var/lib/mysql
+    env_file:
+      - wp.env
+    networks:
+      - wpnetwork
+
+  wpnginx:
+    container_name: wpnginx
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./html:/var/www/html
+      - ./logs:/var/log/nginx/
+      - ./conf/nginx-wp:/etc/nginx/
+    links:
+      - wp
+    labels:
+      traefik.enable: true
+      traefik.http.routers.nginxwp-http.rule: Host(`${FQDN}`)
+      traefik.http.routers.nginxwp-http.entrypoints: http
+      traefik.http.routers.nginxwp-https.rule: Host(`${FQDN}`)
+      traefik.http.routers.nginxwp-https.entrypoints: https
+      traefik.http.routers.nginxwp-https.tls: true
+      traefik.http.routers.nginxwp-https.tls.certresolver: myresolver
+    networks:
+      - proxy
+      - wpnetwork
+
+  wp:
+    container_name: wp
+    image: wordpress:6.0.0-php8.1-fpm-alpine
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./conf/php.ini:/usr/local/etc/php/php.ini
+      - ./html:/var/www/html
+    depends_on:
+      - wpdb
+    env_file:
+      - wp.env
+    networks:
+      - wpnetwork
+
+  wpredis:
+    container_name: wpredis
+    image: redis:6
+    restart: unless-stopped
+    volumes:
+      - ./redis:/data
+    networks:
+      - wpnetwork
+
+networks:
+  wpnetwork:
+  proxy:
+    external: true
