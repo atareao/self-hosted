@@ -41,7 +41,7 @@ services:
 
   wp:
     container_name: wp
-    image: wordpress:6.0.0-php8.1-fpm-alpine
+    image: wordpress:6.0.0-php8.0-fpm-alpine
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
