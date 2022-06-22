@@ -15,12 +15,11 @@ En general el resto de configuración no la tienes que modificar.
 Una vez lo tengas configurado y levantado, hay trabajo que realizar. Tienes que editar el archivo `wp-config.php` y añadir los siguientes parámetros:
 
 ```
-define('WP_REDIS_HOST', 'wpapredis');
+define('WP_REDIS_HOST', 'wpredis');
 define('WP_REDIS_PORT', 6379);
 define('WP_REDIS_TIMEOUT', 1);
 define('WP_REDIS_READ_TIMEOUT', 1);
 define('WP_REDIS_DATABASE', 0);
-define('WP_CACHE_KEY_SALT', 'territoriolinux.es');
 ```
 
 Por otro lado, recordarte, que además tienes un ejecutable `wpcli` que te permitirá trabajar directamente con WordPress desde la línea de comandos.
