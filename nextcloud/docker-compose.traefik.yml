@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  web:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.nextcloud.loadbalancer.server.port=80
+      - traefik.http.routers.nextcloud.entrypoints=web
+      - traefik.http.routers.nextcloud.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.nextcloud-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.nextcloud.middlewares=nextcloud-https-redirect
+      - traefik.http.routers.nextcloud-secure.entrypoints=websecure
+      - traefik.http.routers.nextcloud-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.nextcloud-secure.tls=true
+      - traefik.http.routers.nextcloud-secure.tls.certresolver=letsencrypt
