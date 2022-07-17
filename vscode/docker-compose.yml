@@ -23,7 +23,7 @@ services:
       - traefik.enable=true
       - traefik.http.services.vscode.loadbalancer.server.port=8443
       - traefik.http.routers.vscode.entrypoints=https
-      - traefik.http.routers.vscode.rule=Host(`vscode.territoriolinux.es`)
+      - traefik.http.routers.vscode.rule=Host(`vscode.servidorlinux.es`)
       - traefik.http.routers.vscode.tls=true
       - traefik.http.routers.vscode.tls.certresolver=myresolver
 
