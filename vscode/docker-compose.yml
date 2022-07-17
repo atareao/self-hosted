@@ -1,0 +1,32 @@
+version: "3.1"
+
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - PASSWORD=contraseña #optional
+      #- HASHED_PASSWORD= #optional
+      #- SUDO_PASSWORD=password #optional
+      #- SUDO_PASSWORD_HASH= #optional
+      #- PROXY_DOMAIN=code-server.my.domain #optional
+      #- DEFAULT_WORKSPACE=/config/workspace #optional
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.vscode.loadbalancer.server.port=8443
+      - traefik.http.routers.vscode.entrypoints=https
+      - traefik.http.routers.vscode.rule=Host(`vscode.territoriolinux.es`)
+      - traefik.http.routers.vscode.tls=true
+      - traefik.http.routers.vscode.tls.certresolver=myresolver
+
+networks:
+  proxy:
+    external: true
