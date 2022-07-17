@@ -22,10 +22,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.vscode.loadbalancer.server.port=8443
-      - traefik.http.routers.vscode.entrypoints=https
+      - traefik.http.routers.vscode.entrypoints=websecure
       - traefik.http.routers.vscode.rule=Host(`vscode.servidorlinux.es`)
       - traefik.http.routers.vscode.tls=true
-      - traefik.http.routers.vscode.tls.certresolver=myresolver
+      - traefik.http.routers.vscode.tls.certresolver=letsencrypt
 
 networks:
   proxy:
