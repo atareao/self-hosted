@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mattermost:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.mattermost.loadbalancer.server.port=8000
+      - traefik.http.routers.mattermost.entrypoints=web
+      - traefik.http.routers.mattermost.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.mattermost-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.mattermost.middlewares=mattermost-https-redirect
+      - traefik.http.routers.mattermost-secure.entrypoints=websecure
+      - traefik.http.routers.mattermost-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.mattermost-secure.tls=true
+      - traefik.http.routers.mattermost-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
