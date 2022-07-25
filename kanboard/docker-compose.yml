@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  kanboard:
+    image: kanboard/kanboard:latest
+    container_name: kanboard
+    restart: unless-stopped
+    volumes:
+      - ./kanboard_data:/bar/www/app/data
+      - ./kanboard_plugins:/var/www/app/plugins
