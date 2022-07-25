@@ -22,3 +22,8 @@ docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 docker-compose logs -f
 ```
 
+Una vez levantado las credenciales son:
+
+* username: admin
+* password: admin
+
