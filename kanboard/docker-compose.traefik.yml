@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  kanboard:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.kanboard.loadbalancer.server.port=80
+      - traefik.http.routers.kanboard.entrypoints=web
+      - traefik.http.routers.kanboard.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.kanboard-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.kanboard.middlewares=kanboard-https-redirect
+      - traefik.http.routers.kanboard-secure.entrypoints=websecure
+      - traefik.http.routers.kanboard-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.kanboard-secure.tls=true
+      - traefik.http.routers.kanboard-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
