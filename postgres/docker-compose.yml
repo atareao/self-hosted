@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: journald
+    networks:
+      - internal
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    logging:
+      driver: journald
+    networks:
+      - internal
