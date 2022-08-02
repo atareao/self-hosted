@@ -8,6 +8,8 @@ sed -i "s/flame.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir data
 ```
 
+Además recuerda cambiar la contraseña.
+
 A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
 
 ```
