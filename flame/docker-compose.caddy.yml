@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  flame:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5005}}"
+
+networks:
+  proxy:
+    external: true

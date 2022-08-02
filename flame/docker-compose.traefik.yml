@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  flame:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.flame.loadbalancer.server.port=5005
+      - traefik.http.routers.flame.entrypoints=web
+      - traefik.http.routers.flame.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.flame-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.flame.middlewares=flame-https-redirect
+      - traefik.http.routers.flame-secure.entrypoints=websecure
+      - traefik.http.routers.flame-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.flame-secure.tls=true
+      - traefik.http.routers.flame-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
