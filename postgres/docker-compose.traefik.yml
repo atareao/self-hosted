@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  pgadmin:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.pgadmin.loadbalancer.server.port=80
+      - traefik.http.routers.pgadmin.entrypoints=web
+      - traefik.http.routers.pgadmin.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.pgadmin-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.pgadmin.middlewares=pgadmin-https-redirect
+      - traefik.http.routers.pgadmin-secure.entrypoints=websecure
+      - traefik.http.routers.pgadmin-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.pgadmin-secure.tls=true
+      - traefik.http.routers.pgadmin-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
