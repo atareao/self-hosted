@@ -26,3 +26,6 @@ services:
       driver: journald
     networks:
       - internal
+
+networks:
+  internal:
