@@ -2,7 +2,7 @@
 
 ```
 git clone https://github.com/atareao/self-hosted.git
-cd self-hosted/portainer
+cd self-hosted/flame
 cp sample.env .env
 sed -i "s/flame.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir data
