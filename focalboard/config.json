@@ -2,7 +2,7 @@
     "serverRoot": "http://localhost:8000",
     "port": 8000,
     "dbtype": "postgres",
-    "dbconfig": "postgres://boardsuser:boardsuser-password@focalboard-db/boards?sslmode=disable&connect_timeout=10",
+    "dbconfig": "postgres://boardsuser:boardsuser-password@focalboarddb/boards?sslmode=disable&connect_timeout=10",
     "postgres_dbconfig": "dbname=boards sslmode=disable",
     "useSSL": false,
     "webpath": "./pack",

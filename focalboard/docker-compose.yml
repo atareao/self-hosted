@@ -5,27 +5,24 @@ services:
     image: mattermost/focalboard
     container_name: focalboard
     depends_on:
-      - focalboard-db
-    environment:
-      VIRTUAL_HOST: $VIRTUAL_HOST
-      VIRTUAL_PORT: $VIRTUAL_PORT
-      VIRTUAL_PROTO: $VIRTUAL_PROTO
+      - focalboarddb
+    env_file:
+      - .env
     volumes:
       - ./config.json:/opt/focalboard/config.json
+      - ./files:/opt/focalboard/files
     restart: always
     networks:
       - internal
 
-  focalboard-db:
+  focalboarddb:
     image: postgres:latest
-    container_name: focalboard-postgres
+    container_name: focalboarddb
     restart: always
     volumes:
       - "./data:/var/lib/postgresql/data"
-    environment:
-      POSTGRES_DB: $POSTGRES_DB
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    env_file:
+      - .env
     networks:
       - internal
 
