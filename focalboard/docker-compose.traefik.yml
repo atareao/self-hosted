@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  focalboard:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.focalboard.loadbalancer.server.port=80
+      - traefik.http.routers.focalboard.entrypoints=web
+      - traefik.http.routers.focalboard.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.focalboard-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.focalboard.middlewares=focalboard-https-redirect
+      - traefik.http.routers.focalboard-secure.entrypoints=websecure
+      - traefik.http.routers.focalboard-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.focalboard-secure.tls=true
+      - traefik.http.routers.focalboard-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+
