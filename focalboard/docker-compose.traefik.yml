@@ -6,7 +6,7 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.services.focalboard.loadbalancer.server.port=$VIRTUAL_PORT
+      - traefik.http.services.focalboard.loadbalancer.server.port=8000
       - traefik.http.routers.focalboard.entrypoints=web
       - traefik.http.routers.focalboard.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.focalboard-https-redirect.redirectscheme.scheme=websecure
