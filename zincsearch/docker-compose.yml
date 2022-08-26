@@ -4,8 +4,6 @@ services:
   zinc:
     image: public.ecr.aws/h9e2j3o7/zinc:latest
     container_name: zinc
-    depends_on:
-      - focalboarddb
     env_file:
       - .env
     volumes:

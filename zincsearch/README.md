@@ -5,7 +5,8 @@ git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/zinc
 mv sample.env .env
 sed -i "s/zinc.tuservidor.es/el_fqdn_que_quieras/g" .env
-mkdir -p data
+mkdir data
+sudo chown -R 10001:10001 data
 ```
 
 A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
