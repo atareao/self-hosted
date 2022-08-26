@@ -1,0 +1,32 @@
+GET https://{{FQDN}}/api/index
+Accept: application/json
+Authorization: Basic {{TOKEN}}
+
+GET https://{{FQDN}}/api/index/minidice
+Accept: application/json
+Authorization: Basic {{TOKEN}}
+
+GET https://{{FQDN}}/api/minidice/_mapping
+Accept: application/json
+Authorization: Basic {{TOKEN}}
+
+GET https://{{FQDN}}/api/minidice/_settings
+Accept: application/json
+Authorization: Basic {{TOKEN}}
+
+POST https://{{FQDN}}/api/minidice/_search
+Accept: application/json
+Authorization: Basic {{TOKEN}}
+Content-Type: application/json
+
+{
+    "search_type": "match",
+    "query": {
+        "term": "Sharma",
+        "start_time": "2020-06-02T14:28:31.894Z",
+        "end_time": "2023-12-02T15:28:31.894Z"
+    },
+    "_source": []
+}
+
+
