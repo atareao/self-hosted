@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  zinc:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.zinc.loadbalancer.server.port=4080
+      - traefik.http.routers.zinc.entrypoints=web
+      - traefik.http.routers.zinc.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.zinc-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.zinc.middlewares=zinc-https-redirect
+      - traefik.http.routers.zinc-secure.entrypoints=websecure
+      - traefik.http.routers.zinc-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.zinc-secure.tls=true
+      - traefik.http.routers.zinc-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+
