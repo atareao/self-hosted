@@ -1,0 +1,14 @@
+
+version: '3'
+
+services:
+  vaultwarden:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 80}}"
+
+networks:
+  proxy:
+    external: true

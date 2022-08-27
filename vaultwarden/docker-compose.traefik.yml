@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  vaultwarden:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.vaultwarden.loadbalancer.server.port=80
+      - traefik.http.routers.vaultwarden.entrypoints=web
+      - traefik.http.routers.vaultwarden.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.vaultwarden-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.vaultwarden.middlewares=vaultwarden-https-redirect
+      - traefik.http.routers.vaultwarden-secure.entrypoints=websecure
+      - traefik.http.routers.vaultwarden-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.vaultwarden-secure.tls=true
+      - traefik.http.routers.vaultwarden-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+

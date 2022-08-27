@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:katest
+    container_name: vaultwarden
+    volumes:
+      - ./data:/data
+    restart: always
