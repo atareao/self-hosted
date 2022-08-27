@@ -1,0 +1,24 @@
+version: "3"
+services:
+  codimddb:
+    image: postgres:11.6-alpine
+    env_file:
+      - .env
+    volumes:
+      - ./codimddb:/var/lib/postgresql/data"
+    restart: always
+    networks:
+      - internal
+  codimd:
+    image: hackmdio/hackmd:2.4.2-cjk
+    env_file:
+      - .env
+    depends_on:
+      - codimddb
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./codimd:/home/hackmd/app/public/uploads
+    restart: always
+    networks:
+      - internal
