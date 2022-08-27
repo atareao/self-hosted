@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  codimd:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.codimd.loadbalancer.server.port=3000
+      - traefik.http.routers.codimd.entrypoints=web
+      - traefik.http.routers.codimd.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.codimd-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.codimd.middlewares=codimd-https-redirect
+      - traefik.http.routers.codimd-secure.entrypoints=websecure
+      - traefik.http.routers.codimd-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.codimd-secure.tls=true
+      - traefik.http.routers.codimd-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
+
