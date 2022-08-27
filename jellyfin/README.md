@@ -5,11 +5,9 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/jellyfin
-mkdir config
-mkdir cache
-mkdir media
-mkdir media2
+mkdir config cache media media2
 cp sample.env .env
+sed -i "s/jellyfin.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
 
