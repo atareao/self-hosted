@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  mariadb:
+    image: mariadb
+    restart: unless-stopped
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - internal
+
+  facturascripts:
+    image: facturascripts/facturascripts:latest
+    restart: always
+    volumes:
+      - ./facturascripts:/var/www/html
+
+networks:
+  internal:
