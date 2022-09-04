@@ -16,6 +16,8 @@ services:
     restart: always
     volumes:
       - ./facturascripts:/var/www/html
+    networks:
+      - internal
 
 networks:
   internal:
