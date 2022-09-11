@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  nitter:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.nitter.loadbalancer.server.port=8080
+      - traefik.http.routers.nitter.entrypoints=web
+      - traefik.http.routers.nitter.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.nitter-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.nitter.middlewares=nitter-https-redirect
+      - traefik.http.routers.nitter-secure.entrypoints=websecure
+      - traefik.http.routers.nitter-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.nitter-secure.tls=true
+      - traefik.http.routers.nitter-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
