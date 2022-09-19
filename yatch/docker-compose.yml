@@ -3,8 +3,8 @@ version: "3"
 services:
   yacht:
     image: selfhostedpro/yacht
-    name: yacht
+    container_name: yacht
     volumes:
       - ./config:/config
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopeed
+    restart: unless-stopped
