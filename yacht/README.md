@@ -22,3 +22,9 @@ docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 docker-compose logs -f
 ```
 
+Las credenciales por defecto son,
+
+```
+usuario: admin@yacht.local
+password: pass
+```
