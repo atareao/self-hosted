@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  yacht:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8000}}"
+
+networks:
+  proxy:
+    external: true
