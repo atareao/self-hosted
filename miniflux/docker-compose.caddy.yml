@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  dnote:
+  snibox:
     networks:
       - proxy
     labels:
