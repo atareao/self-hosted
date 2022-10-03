@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  snibox:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.snibox.loadbalancer.server.port=80
+      - traefik.http.routers.snibox.entrypoints=web
+      - traefik.http.routers.snibox.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.snibox-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.snibox.middlewares=snibox-https-redirect
+      - traefik.http.routers.snibox-secure.entrypoints=websecure
+      - traefik.http.routers.snibox-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.snibox-secure.tls=true
+      - traefik.http.routers.snibox-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true

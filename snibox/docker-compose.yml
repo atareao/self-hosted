@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+  snibox:
+    image: snibox/nginx-puma:1.15.9
+    init: true
+    volumes:
+      - static-files:/var/www/html
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+  backend:
+    image: snibox/snibox:latest
+    init: true
+    command: sh -c "rm -rf tmp/pids && ./bin/rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      DB_NAME: "${DB_NAME}"
+      DB_USER: "${DB_USER}"
+      DB_PASS: "${DB_PASS}"
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
+      FORCE_SSL: "${FORCE_SSL}"
+      MAILGUN_SMTP_PORT: "${MAILGUN_SMTP_PORT}"
+      MAILGUN_SMTP_SERVER: "${MAILGUN_SMTP_SERVER}"
+      MAILGUN_SMTP_LOGIN: "${MAILGUN_SMTP_LOGIN}"
+      MAILGUN_SMTP_PASSWORD: "${MAILGUN_SMTP_PASSWORD}"
+      MAILGUN_API_KEY: "${MAILGUN_API_KEY}"
+      MAILGUN_DOMAIN: "${MAILGUN_DOMAIN}"
+      MAILGUN_PUBLIC_KEY: "${MAILGUN_PUBLIC_KEY}"
+      SECRET_KEY_BASE: "${SECRET_KEY_BASE}"
+    volumes:
+      - static-files:/app/public
+    depends_on:
+      - database
+    networks:
+      - internal
+
+  database:
+    image: postgres:10.7-alpine
+    init: true
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+volumes:
+  pg-data:
+  static-files:
+
+networks:
+  internal:
