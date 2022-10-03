@@ -7,6 +7,8 @@ mv sample.env .env
 sed -i "s/snibox.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
+Nada mas terminar tienes que ejecutar `./bin/setup`
+
 A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
 
 ```
