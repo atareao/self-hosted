@@ -25,3 +25,5 @@ services:
 
 networks:
   internal:
+  proxy:
+    external: true
