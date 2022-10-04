@@ -7,6 +7,7 @@ services:
       - db
     networks:
       - proxy
+      - internal
     env_file:
       - .env
   db:
