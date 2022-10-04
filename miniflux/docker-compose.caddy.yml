@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  snibox:
+  miniflux:
     networks:
       - proxy
     labels:
