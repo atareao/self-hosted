@@ -1,7 +1,8 @@
-iversion: '3'
+version: "3.7"
 services:
   wallabag:
     image: wallabag/wallabag
+    init: true
     container_name: wallabag
     environment:
       - SYMFONY__ENV__DOMAIN_NAME="https://${FQDN}"
@@ -9,19 +10,3 @@ services:
     volumes:
       - ./images:/var/www/wallabag/web/assets/images
       - ./data:/var/www/wallabag/data
-    networks:
-      - proxy
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.wallabag.entrypoints=web
-      - traefik.http.routers.wallabag.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.wallabag-https-redirect.redirectscheme.scheme=websecure
-      - traefik.http.routers.wallabag.middlewares=wallabag-https-redirect
-      - traefik.http.routers.wallabag-secure.entrypoints=websecure
-      - traefik.http.routers.wallabag-secure.rule=Host(`${FQDN}`)
-      - traefik.http.routers.wallabag-secure.tls=true
-      - traefik.http.routers.wallabag-secure.tls.certresolver=letsencrypt
-
-networks:
-  proxy:
-    external: true
