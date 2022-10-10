@@ -10,3 +10,5 @@ services:
     volumes:
       - ./images:/var/www/wallabag/web/assets/images
       - ./data:/var/www/wallabag/data
+    restart: unless-stopped
+    
