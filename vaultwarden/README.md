@@ -1,4 +1,6 @@
-# Installation
+# Instalación
+
+[Vaultwarden](https://github.com/dani-garcia/vaultwarden) es un servidor no oficial de Bitwarden, un gestor de contraseñas que almacena la información en  una caja fuerte cifrada.
 
 ```
 git clone https://github.com/atareao/self-hosted.git
