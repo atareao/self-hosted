@@ -1,4 +1,6 @@
-# Installation
+# Instalación
+
+[Wallabag](https://github.com/wallabag/wallabag) es un servicio para guardar artículos y leerlos más tarde en formato de texto (read it later).
 
 ```
 cp sample.env .env
