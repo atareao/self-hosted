@@ -6,4 +6,4 @@ services:
     container_name: vaultwarden
     volumes:
       - ./data:/data
-    restart: always
+    restart: unless-stopped
