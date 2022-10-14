@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  immich-proxy:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.immich.loadbalancer.server.port=8080
+      - traefik.http.routers.immich.entrypoints=web
+      - traefik.http.routers.immich.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.immich-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.immich.middlewares=immich-https-redirect
+      - traefik.http.routers.immich-secure.entrypoints=websecure
+      - traefik.http.routers.immich-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.immich-secure.tls=true
+      - traefik.http.routers.immich-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
