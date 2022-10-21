@@ -6,6 +6,6 @@ services:
     container_name: vaultwarden
     volumes:
       - ./data:/data
-    restart: always
+    restart: unless-stopped
     environment:
       - ADMIN_TOKEN=some_random_token_as_per_above_explanation
