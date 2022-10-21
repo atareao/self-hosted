@@ -7,3 +7,5 @@ services:
     volumes:
       - ./data:/data
     restart: unless-stopped
+    environment:
+      - ADMIN_TOKEN=some_random_token_as_per_above_explanation
