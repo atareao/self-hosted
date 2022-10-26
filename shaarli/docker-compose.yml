@@ -7,5 +7,9 @@ services:
     init: true
     restart: always
     volumes:
-      - ./cache:/var/www/shaarli/cache
-      - ./data:/var/www/shaarli/data
+      - cache:/var/www/shaarli/cache
+      - data:/var/www/shaarli/data
+
+volumes:
+  cache: {}
+  data: {}
