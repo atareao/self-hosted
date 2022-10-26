@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  shaarli:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.shaarli.loadbalancer.server.port=80
+      - traefik.http.routers.shaarli.entrypoints=web
+      - traefik.http.routers.shaarli.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.shaarli-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.shaarli.middlewares=shaarli-https-redirect
+      - traefik.http.routers.shaarli-secure.entrypoints=websecure
+      - traefik.http.routers.shaarli-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.shaarli-secure.tls=true
+      - traefik.http.routers.shaarli-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true

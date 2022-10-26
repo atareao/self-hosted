@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  shaarli:
+    image: shaarli/shaarli:latest
+    container_name: shaarli
+    init: true
+    restart: always
+    volumes:
+      ./cache:/var/www/shaarli/cache
+      ./data:/var/www/shaarli/data
