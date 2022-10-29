@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  umami:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 3000}}"
+
+networks:
+  proxy:
+    external: true

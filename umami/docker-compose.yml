@@ -1,0 +1,39 @@
+---
+version: "3.7"
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container: umami
+    init: true
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      DATABASE_TYPE: postgresql
+      HASH_SALT: replace-me-with-a-random-string
+    file_env:
+      - .env
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - internal
+
+  db:
+    image: postgres:14-alpine
+    container: postgresql
+    init: true
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - internal
+    volumes:
+      - ./schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
+      - umami-db-data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  umami-db-data: {}
+
+networks:
+  internal: {}version: "3"
