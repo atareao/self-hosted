@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  dasherr:
+    image: atareao/dasherr
+    container_name: dasherr
+    init: true
+    restart: unless-stopped
+    volumes:
+      - ./htpasswd:/opt/nginx/conf/.htpasswd

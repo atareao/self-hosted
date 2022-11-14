@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  dasherr:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8080}}"
+
+networks:
+  proxy:
+    external: true
