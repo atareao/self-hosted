@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  simpletorrent:
+    image: boypt/cloud-torrent
+    container_name: simpletorrent
+    init: true
+    restart: unless-stopped
+    ports:
+      - "50012:50012"
+      - "50012:50012/udp"
+    environment:
+      AUTH: "username:password"
+      TITLE: "MySimpleTorrent"
+    volumes:
+      - ./downloads:/srv/downloads
+      - ./cloud-torrent.yaml:/etc/cloud-torrent.yaml
+    command: ["-c", "/etc/cloud-torrent.yaml"]

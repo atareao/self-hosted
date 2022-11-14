@@ -1,13 +1,14 @@
-version: "3"
+version: "3.7"
 
 services:
-  mattermost:
+  dasherr:
     networks:
       - proxy
     labels:
       - caddy="${FQDN}"
-      - caddy.reverse_proxy="{{upstreams 8000}}"
+      - caddy.reverse_proxy="{{upstreams 3000}}"
 
 networks:
   proxy:
     external: true
+
