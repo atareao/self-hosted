@@ -1,0 +1,3 @@
+[submodule "dasherr/Dasherr"]
+	path = dasherr/Dasherr
+	url = https://github.com/erohtar/Dasherr.git
