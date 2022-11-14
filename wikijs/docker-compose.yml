@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres_for_wikijs
+    init: true
+    logging:
+      driver: "none"
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  wikijs:
+    image: ghcr.io/requarks/wiki:2
+    container_name: wikijs
+    init: true
+    depends_on:
+      - db
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  internal:
+  proxy:
+    external: true

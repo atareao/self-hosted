@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  wikijs:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.wikijs.loadbalancer.server.port=${PORT}
+      - traefik.http.routers.wikijs.entrypoints=http
+      - traefik.http.routers.wikijs.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.wikijs-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.wikijs.middlewares=wikijs-https-redirect
+      - traefik.http.routers.wikijs-secure.entrypoints=https
+      - traefik.http.routers.wikijs-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.wikijs-secure.tls=true
+      - traefik.http.routers.wikijs-secure.tls.certresolver=myresolver
+
+networks:
+  internal:
+  proxy:
+    external: true
+
