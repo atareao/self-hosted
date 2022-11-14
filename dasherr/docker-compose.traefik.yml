@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  dasherr:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.dasherr.loadbalancer.server.port=8080
+      - traefik.http.routers.dasherr.entrypoints=web
+      - traefik.http.routers.dasherr.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.dasherr-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.dasherr.middlewares=dasherr-https-redirect
+      - traefik.http.routers.dasherr-secure.entrypoints=websecure
+      - traefik.http.routers.dasherr-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.dasherr-secure.tls=true
+      - traefik.http.routers.dasherr-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
