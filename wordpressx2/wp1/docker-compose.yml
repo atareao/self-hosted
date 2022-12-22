@@ -1,0 +1,66 @@
+version: "3.7"
+
+services:
+  wordpress:
+    image: wordpress
+    container_name: wp1
+    restart: always
+    init: true
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    volumes:
+      - wp1:/var/www/html
+      - ./plugins:/var/www/html/wp-content/plugins
+      - ./themes:/var/www/html/wp-content/themes
+      - ./uploads:/var/www/html/wp-content/uploads
+      - ./wp-config.php:/var/www/html/wp-config.php
+    networks:
+      - proxy
+      - internal
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 80}}"
+
+    mariadb:
+      image: mariadb
+      container_name: wp1_mariadb
+      restart: always
+      init: true
+      environment:
+        MYSQL_DATABASE: ${DB_NAME}
+        MYSQL_USER: ${DB_USER}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+      volumes:
+        - wp1_mariadb:/var/lib/mysql
+      networks:
+        - internal
+
+    redis:
+      image: redis:6
+      container_name: wp1_redis
+      restart: always
+      init: true
+      depends_on:
+        - mariadb
+      volumes:
+        - wp1_redis:/data
+      networks:
+        - internal
+
+volumes:
+  wp1: {}
+  wp1_mariadb: {}
+  wp1_redis: {}
+
+networks:
+  internal: {}
+  proxy:
+    external: true
+
+      
