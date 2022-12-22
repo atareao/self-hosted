@@ -27,31 +27,31 @@ services:
       - caddy="${FQDN}"
       - caddy.reverse_proxy="{{upstreams 80}}"
 
-    mariadb:
-      image: mariadb
-      container_name: wp1_mariadb
-      restart: always
-      init: true
-      environment:
-        MYSQL_DATABASE: ${DB_NAME}
-        MYSQL_USER: ${DB_USER}
-        MYSQL_PASSWORD: ${DB_PASSWORD}
-      volumes:
-        - wp1_mariadb:/var/lib/mysql
-      networks:
-        - internal
+  mariadb:
+    image: mariadb
+    container_name: wp1_mariadb
+    restart: always
+    init: true
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - wp1_mariadb:/var/lib/mysql
+    networks:
+      - internal
 
-    redis:
-      image: redis:6
-      container_name: wp1_redis
-      restart: always
-      init: true
-      depends_on:
-        - mariadb
-      volumes:
-        - wp1_redis:/data
-      networks:
-        - internal
+  redis:
+    image: redis:6
+    container_name: wp1_redis
+    restart: always
+    init: true
+    depends_on:
+      - mariadb
+    volumes:
+      - wp1_redis:/data
+    networks:
+      - internal
 
 volumes:
   wp1: {}
