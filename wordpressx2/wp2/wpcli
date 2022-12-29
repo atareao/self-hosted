@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CONTAINER=$(basename $PWD)
+VOLUME="${CONTAINER}_${CONTAINER}"
+DB_USER=$(grep DB_USER .env | cut -d'=' -f2)
+DB_PASSWORD=$(grep DB_USER .env | cut -d'=' -f2)
+DB_NAME=$(grep DB_USER .env | cut -d'=' -f2)
+docker run -it \
+	  --rm \
+	  --mount source=${VOLUME},target=/var/www/html \
+           --volume $(pwd)/plugins:/var/www/html/wp-content/plugins \
+           --volume $(pwd)/themes:/var/www/html/wp-content/themes \
+           --volume $(pwd)/uploads:/var/www/html/wp-content/uploads \
+           --volume $(pwd)/wp-config.php:/var/www/html/wp-config.php \
+           --network container:${CONTAINER} \
+           --env WORDPRESS_DB_HOST="mariadb" \
+           --env WORDPRESS_DB_USER="${DB_USER}" \
+           --env WORDPRESS_DB_PASSWORD="${DB_PASSWORD}" \
+           --env WORDPRESS_DB_NAME="${DB_NAME}" \
+	  wordpress:cli "$@"
