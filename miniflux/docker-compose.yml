@@ -3,6 +3,7 @@ services:
   miniflux:
     image: miniflux/miniflux:latest
     init: true
+    restart: unless-stopped
     depends_on:
       - db
     networks:
@@ -13,6 +14,7 @@ services:
   db:
     image: postgres:latest
     init: true
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
