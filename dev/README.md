@@ -2,45 +2,26 @@
 
 ```
 git clone https://github.com/atareao/self-hosted.git
-cd self-hosted/wordpressx2/wp1
+cd self-hosted/dev
 cp sample.env .env
-sed -i "s/wp.tuservidor.es/el_fqdn_que_quieras/g" .env
-cd ..
-cd self-hosted/wordpressx2/wp2
-cp sample.env .env
-sed -i "s/wp.tuservidor.es/el_fqdn_que_quieras/g" .env
-cd self-hosted/wordpressx2/phpmyadmin
-cp sample.env .env
-sed -i "s/wp.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
-Tendrás que modificar los parámetros que vienen en el archivo `wp.env`, para personalizar las contraseñas, y el resto de valores. Ten en cuenta, que algunos de estos valores son idénticos entre variables.
+Recuerda cabiar los credenciales en el archivo `.env`, sobre todo los dos FQDN, tanto el de WordPress como el de acceso a PHPMyAdmin,
 
-En general el resto de configuración no la tienes que modificar.
-
-Una vez lo tengas configurado y levantado, hay trabajo que realizar. Tienes que editar el archivo `wp-config.php` y añadir los siguientes parámetros:
 
 ```
-define('WP_REDIS_HOST', 'wpredis');
-define('WP_REDIS_PORT', 6379);
-define('WP_REDIS_TIMEOUT', 1);
-define('WP_REDIS_READ_TIMEOUT', 1);
-define('WP_REDIS_DATABASE', 0);
+FQDN_WORDPRESS=dev.tuservidor.es
+FQDN_PHPMYADMIN=myadmin.tuservidor.es
 ```
 
 Por otro lado, recordarte, que además tienes un ejecutable `wpcli` que te permitirá trabajar directamente con WordPress desde la línea de comandos.
 
-A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
+Este `docker-compose` está pensado para trabajar exclusivamente con Caddy, aunque es fácil migrarlo a Traefik, cambian las etiquetas correspondientes.
+
+A la hora de levantar el servicio, simplemente eje cuta
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
-docker-compose logs -f
+docker-compose up -d
 ```
 
-Mientras que si has elegido Traefik,
-
-```
-docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
-docker-compose logs -f
-```
-
+Para revisar los logs tienes que utiliza `docker-compose logs`, incluyendo el flag `-f`, en el caso de que lo quieras seguir
