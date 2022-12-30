@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  flatnotes:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.flatnotes.loadbalancer.server.port=3000
+      - traefik.http.routers.flatnotes.entrypoints=web
+      - traefik.http.routers.flatnotes.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.flatnotes-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.flatnotes.middlewares=flatnotes-https-redirect
+      - traefik.http.routers.flatnotes-secure.entrypoints=websecure
+      - traefik.http.routers.flatnotes-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.flatnotes-secure.tls=true
+      - traefik.http.routers.flatnotes-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
