@@ -5,7 +5,6 @@ git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/flatnotes
 mv sample.env .env
 sed -i "s/dnote.tuservidor.es/el_fqdn_que_quieras/g" .env
-mkdir data
 ```
 
 También deberías cambiar el resto de parámetros relativos a la autenticación.
