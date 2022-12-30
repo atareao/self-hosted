@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   flatnotes:
-    image: dnote/dnote:latest
+    image: dullage/flatnotes:latest
     container_name: flatnotes
     init: true
     environment:
@@ -14,7 +14,10 @@ services:
     networks:
       - proxy
     volumes:
-      - ./data:/app/data
+      - data:/app/data
+
+volumes:
+  data: {}
 
 networks:
   proxy:
