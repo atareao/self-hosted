@@ -4,8 +4,14 @@ services:
   zinc:
     image: public.ecr.aws/h9e2j3o7/zinc:latest
     container_name: zinc
-    env_file:
-      - .env
+    environment:
+      - DATA_PATH
+      - ZINC_FIRST_ADMIN_USER
+      - ZINC_FIRST_ADMIN_PASSWORD
+      - TOKEN
     volumes:
-      - ./data:/data
+      - data:/data
     restart: always
+
+volumes:
+  data: {}
