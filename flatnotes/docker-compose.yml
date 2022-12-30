@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  flatnotes:
+    image: dnote/dnote:latest
+    container_name: flatnotes
+    init: true
+    environment:
+      - FLATNOTES_AUTH_TYPE
+      - FLATNOTES_USERNAME
+      - FLATNOTES_PASSWORD
+      - FLATNOTES_SECRET_KEY
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - ./data:/app/data
+
+networks:
+  proxy:
+    external: true
