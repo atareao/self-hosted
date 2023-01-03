@@ -21,4 +21,6 @@ Mientras que si has elegido Traefik,
 docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
 docker-compose logs -f
 ```
+A continuación, se iniciará el asistente de configuración de FacturaSripts. Deberemos cambiar el campo `localhost` por `facturascirpts_mariadb_1` y la contraseña que hayamos dejado en el archivo `.env`.
 
+Para poder acceder a la configuración posterior, los datos de acceso por defecto son `user: admin` y `password: admin`
