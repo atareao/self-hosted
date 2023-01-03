@@ -6,7 +6,7 @@ services:
       - proxy
     labels:
       - traefik.enable=true
-      - traefik.http.services.facturascripts.loadbalancer.server.port=3000
+      - traefik.http.services.facturascripts.loadbalancer.server.port=80
       - traefik.http.routers.facturascripts.entrypoints=web
       - traefik.http.routers.facturascripts.rule=Host(`${FQDN}`)
       - traefik.http.middlewares.facturascripts-https-redirect.redirectscheme.scheme=websecure
