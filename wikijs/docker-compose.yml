@@ -7,8 +7,16 @@ services:
     init: true
     logging:
       driver: "none"
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - DB_TYPE
+      - DB_HOST
+      - DB_PORT
+      - DB_USER
+      - DB_PASS
+      - DB_NAME
     restart: unless-stopped
     volumes:
       - ./data:/var/lib/postgresql/data
@@ -21,8 +29,16 @@ services:
     init: true
     depends_on:
       - db
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - DB_TYPE
+      - DB_HOST
+      - DB_PORT
+      - DB_USER
+      - DB_PASS
+      - DB_NAME
     restart: unless-stopped
     networks:
       - internal
