@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  trilium:
+    image: zadam/trilium:latest
+    container_name: trilium
+    init: true
+    restart: unless-stopped
+    networks:
+      - internal
+    environment:
+      - TRILIUM_DATA_DIR
+    volumes:
+      trilium:/home/node/trilium-data
+
+volumes:
+  trilium: {}
+
+networks:
+  internal: {}
