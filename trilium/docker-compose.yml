@@ -11,7 +11,7 @@ services:
     environment:
       - TRILIUM_DATA_DIR
     volumes:
-      trilium:/home/node/trilium-data
+    - trilium:/home/node/trilium-data
 
 volumes:
   trilium: {}
