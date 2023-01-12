@@ -2,9 +2,9 @@
 
 ```
 git clone https://github.com/atareao/self-hosted.git
-cd self-hosted/dnote
+cd self-hosted/trilium
 mv sample.env .env
-sed -i "s/dnote.tuservidor.es/el_fqdn_que_quieras/g" .env
+sed -i "s/trilium.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir dnote_data
 ```
 
