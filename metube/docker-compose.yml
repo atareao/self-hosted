@@ -12,4 +12,4 @@ services:
       - metube:/downloads
 
 volumes:
-  metube: 8081
+  metube: {}
