@@ -7,9 +7,13 @@ services:
     init: true
     restart: unless-stopped
     networks:
-      - internal
+      - proxy
     volumes:
       - metube:/downloads
 
 volumes:
   metube: {}
+
+networks:
+  proxy:
+    external: true
