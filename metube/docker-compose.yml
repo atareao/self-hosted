@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  metube:
+    image: alexta69/metube
+    container_name: metube
+    init: true
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - metube:/downloads
+
+volumes:
+  metube: 8081
