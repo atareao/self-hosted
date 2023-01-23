@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  logseq:
+    image: ghcr.io/logseq/logseq-webapp:latest
+    container_name: logseq
+    init: true
+    restart: unless-stopped
