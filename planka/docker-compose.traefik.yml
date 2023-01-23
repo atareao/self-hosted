@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  planka:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.planka.loadbalancer.server.port=1337
+      - traefik.http.routers.planka.entrypoints=web
+      - traefik.http.routers.planka.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.planka-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.planka.middlewares=planka-https-redirect
+      - traefik.http.routers.planka-secure.entrypoints=websecure
+      - traefik.http.routers.planka-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.planka-secure.tls=true
+      - traefik.http.routers.planka-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
