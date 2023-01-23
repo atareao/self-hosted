@@ -6,7 +6,7 @@
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/logseq
 cp sample.env .env
-sed -i "s/flame.tuservidor.es/el_fqdn_que_quieras/g" .env
+sed -i "s/logseq.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir data
 ```
 
