@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  planka:
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 1337}}"
+
+networks:
+  proxy:
+    external: true
