@@ -6,8 +6,6 @@ services:
     container_name: memos
     init: true
     restart: unless-stopped
-    networks:
-      - proxy
     volumes:
       - memos:/var/opt/memos
 
