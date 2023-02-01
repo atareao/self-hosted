@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  homepage:
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    init: true
+    restart: unless-stopped
+    volumes:
+      - memos_config:/app/config
+
+volumes:
+  memos_config: {}
