@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  homepage:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+      - traefik.http.routers.homepage.entrypoints=web
+      - traefik.http.routers.homepage.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.homepage-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.homepage.middlewares=homepage-https-redirect
+      - traefik.http.routers.homepage-secure.entrypoints=websecure
+      - traefik.http.routers.homepage-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.homepage-secure.tls=true
+      - traefik.http.routers.homepage-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
