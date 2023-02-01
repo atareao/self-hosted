@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  memos:
+    image: neosmemo/memos:latest
+    container_name: memos
+    init: true
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - memos:/var/opt/memos
+
+volumes:
+  memos: {}

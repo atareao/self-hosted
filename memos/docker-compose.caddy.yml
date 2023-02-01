@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  memos:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5230}}"
+
+networks:
+  proxy:
+    external: true
