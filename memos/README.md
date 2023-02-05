@@ -3,8 +3,8 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/memos
-mv sample.env .env
-sed -i "s/dnote.tuservidor.es/el_fqdn_que_quieras/g" .env
+cp sample.env .env
+sed -i "s/memos.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
 A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
