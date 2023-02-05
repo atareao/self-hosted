@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  chevereto:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.chevereto.loadbalancer.server.port=80
+      - traefik.http.routers.chevereto.entrypoints=web
+      - traefik.http.routers.chevereto.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.chevereto-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.chevereto.middlewares=chevereto-https-redirect
+      - traefik.http.routers.chevereto-secure.entrypoints=websecure
+      - traefik.http.routers.chevereto-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.chevereto-secure.tls=true
+      - traefik.http.routers.chevereto-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
