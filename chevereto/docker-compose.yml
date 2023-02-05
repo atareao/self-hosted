@@ -9,7 +9,7 @@ services:
     volumes:
       - chevereto:/var/www/html/images
     networks:
-      -internal
+      - internal
     environment:
       CHEVERETO_DB_HOST: mariadb
       CHEVERETO_DB_USER: ${DB_USER}
