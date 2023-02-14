@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+
+  grafana:
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 3000}}"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

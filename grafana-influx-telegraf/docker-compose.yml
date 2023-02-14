@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+    init: true
+    environment:
+      - GF_INSTALL_PLUGINS
+      - GF_SECURITY_ADMIN_USER
+      - GF_SECURITY_ADMIN_PASSWORD
+      - GF_USERS_ALLOW_SIGN_UP
+    volumes:
+      - data_influxdb:/var/lib/influxdb
+    networks:
+      - internal
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    init: true
+    links:
+      - influxdb
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /usr/lib/sysstat:/usr/lib/sysstat
+    networks:
+      - internal
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    init: true
+    environment:
+      - INFLUXDB_DATA_ENGINE
+      - INFLUXDB_REPORTING_DISABLED
+    user: "0"
+    links:
+      - influxdb
+    volumes:
+      - data_grafana:/var/lib/grafana
+    networks:
+      - internal
+
+volumes:
+  data_influxdb: {}
+  data_grafana: {}
+
+networks:
+  internal:
