@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: huginn_mariadb
+    restart: unless-stopped
+    init: true
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - huginn_mariadb:/var/lib/mysql
+    networks:
+      - internal
+
+  huginn:
+    image: huginn/huginn-single-process
+    container_name: huginn
+    restart: unless-stopped
+    init: true
+    environment:
+      DATABASE_NAME: ${DB_NAME}
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - mariadb
+    networks:
+      - internal
+
+  threaded:
+    image: huginn/huginn-single-process
+    container_name: threaded
+    restart: unless-stopped
+    init: true
+    environment:
+      DATABASE_NAME: ${DB_NAME}
+      DATABASE_USERNAME: ${DB_USER}
+      DATABASE_PASSWORD: ${DB_PASSWORD}
+      WORKER_CMD: bin/threaded.rb
+    depends_on:
+      - mariadb
+    networks:
+      - internal
+
+volumes:
+  huginn_mariadb: {}
+
+networks:
+  internal: {}

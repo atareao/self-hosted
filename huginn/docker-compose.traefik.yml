@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  huginn:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.huginn.loadbalancer.server.port=3000
+      - traefik.http.routers.huginn.entrypoints=web
+      - traefik.http.routers.huginn.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.huginn-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.huginn.middlewares=huginn-https-redirect
+      - traefik.http.routers.huginn-secure.entrypoints=websecure
+      - traefik.http.routers.huginn-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.huginn-secure.tls=true
+      - traefik.http.routers.huginn-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
