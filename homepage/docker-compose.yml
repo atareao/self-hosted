@@ -7,7 +7,8 @@ services:
     init: true
     restart: unless-stopped
     volumes:
-      - memos_config:/app/config
+      - homepage_config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
-  memos_config: {}
+  homepage_config: {}
