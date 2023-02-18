@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  homer:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.homer.loadbalancer.server.port=8080
+      - traefik.http.routers.homer.entrypoints=web
+      - traefik.http.routers.homer.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.homer-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.homer.middlewares=homer-https-redirect
+      - traefik.http.routers.homer-secure.entrypoints=websecure
+      - traefik.http.routers.homer-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.homer-secure.tls=true
+      - traefik.http.routers.homer-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
