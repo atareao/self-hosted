@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  dozzle:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - traefik.http.routers.dozzle.entrypoints=web
+      - traefik.http.routers.dozzle.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.dozzle-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.dozzle.middlewares=dozzle-https-redirect
+      - traefik.http.routers.dozzle-secure.entrypoints=websecure
+      - traefik.http.routers.dozzle-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.dozzle-secure.tls=true
+      - traefik.http.routers.dozzle-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
