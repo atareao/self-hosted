@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    init: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DOZZLE_USERNAME: user
+      DOZZLE_PASSWORD: password
