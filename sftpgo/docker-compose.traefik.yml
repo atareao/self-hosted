@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  sftpgo:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.sftpgo.loadbalancer.server.port=8080
+      - traefik.http.routers.sftpgo.entrypoints=web
+      - traefik.http.routers.sftpgo.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.sftpgo-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.sftpgo.middlewares=sftpgo-https-redirect
+      - traefik.http.routers.sftpgo-secure.entrypoints=websecure
+      - traefik.http.routers.sftpgo-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.sftpgo-secure.tls=true
+      - traefik.http.routers.sftpgo-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
