@@ -6,9 +6,9 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER
-      POSTGRES_PASSWORD
-      POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     volumes:
       - postgres_data:/var/lib/postgresql/data
     logging:
@@ -21,8 +21,8 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL
-      PGADMIN_DEFAULT_PASSWORD
+      - PGADMIN_DEFAULT_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD
     volumes:
       - pgadmin:/var/lib/pgadmin
     logging:
