@@ -5,8 +5,10 @@ services:
     container_name: postgres
     image: postgres:latest
     restart: always
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER
+      POSTGRES_PASSWORD
+      POSTGRES_DB
     volumes:
       - postgres_data:/var/lib/postgresql/data
     logging:
@@ -18,8 +20,9 @@ services:
     container_name: pgadmin4
     image: dpage/pgadmin4
     restart: always
-    env_file:
-      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL
+      PGADMIN_DEFAULT_PASSWORD
     volumes:
       - pgadmin:/var/lib/pgadmin
     logging:
