@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
+    init: true
+    restart: unless-stopped
+    volumes:
+      - cloudbeaver:/opt/cloudbeaver/workspace
+
+volumes:
+  cloudbeaver: {}

@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  cloudbeaver:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.cloudbeaver.loadbalancer.server.port=8978
+      - traefik.http.routers.cloudbeaver.entrypoints=web
+      - traefik.http.routers.cloudbeaver.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.cloudbeaver-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.cloudbeaver.middlewares=cloudbeaver-https-redirect
+      - traefik.http.routers.cloudbeaver-secure.entrypoints=websecure
+      - traefik.http.routers.cloudbeaver-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.cloudbeaver-secure.tls=true
+      - traefik.http.routers.cloudbeaver-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
