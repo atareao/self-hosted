@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     logging:
       driver: journald
     networks:
@@ -21,11 +21,15 @@ services:
     env_file:
       - .env
     volumes:
-      - ./pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     logging:
       driver: journald
     networks:
       - internal
+
+volumes:
+  postgres_data: {}
+  pgadmin: {}
 
 networks:
   internal:

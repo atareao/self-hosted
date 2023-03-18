@@ -5,9 +5,6 @@ git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/postgres
 cp sample.env .env
 sed -i "s/flame.tuservidor.es/el_fqdn_que_quieras/g" .env
-mkdir data pgadmin
-chown 999:0 data
-chown 5050:1000 pgadmin
 ```
 
 Además recuerda cambiar la contraseña.
