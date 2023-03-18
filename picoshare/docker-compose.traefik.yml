@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  picoshare:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.picoshare.loadbalancer.server.port=${PORT}
+      - traefik.http.routers.picoshare.entrypoints=web
+      - traefik.http.routers.picoshare.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.picoshare-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.picoshare.middlewares=picoshare-https-redirect
+      - traefik.http.routers.picoshare-secure.entrypoints=websecure
+      - traefik.http.routers.picoshare-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.picoshare-secure.tls=true
+      - traefik.http.routers.picoshare-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true

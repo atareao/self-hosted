@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  picoshare:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams ${PORT}}}"
+
+networks:
+  proxy:
+    external: true
