@@ -13,4 +13,4 @@ services:
       - picoshare:/data
 
 volumes:
-  cloudbeaver: {}
+  picoshare: {}
