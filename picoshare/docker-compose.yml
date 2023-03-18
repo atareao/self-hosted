@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  picoshare:
+    image: mtlynch/picoshare
+    container_name: picoshare
+    init: true
+    restart: unless-stopped
+    environment:
+      - PORT
+      - PS_SHARED_SECRET
+    volumes:
+      - picoshare:/data
+
+volumes:
+  cloudbeaver: {}
