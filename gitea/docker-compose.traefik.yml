@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  gitea:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
+      - traefik.http.routers.gitea.entrypoints=web
+      - traefik.http.routers.gitea.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.gitea-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.gitea.middlewares=gitea-https-redirect
+      - traefik.http.routers.gitea-secure.entrypoints=websecure
+      - traefik.http.routers.gitea-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.gitea-secure.tls=true
+      - traefik.http.routers.gitea-secure.tls.certresolver=letsencrypt
+      - traefik.tcp.routers.gitea-ssh.entrypoints=git
+      - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
+      - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
