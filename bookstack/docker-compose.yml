@@ -4,13 +4,13 @@ services:
     image: lscr.io/linuxserver/bookstack
     container_name: bookstack
     environment:
-      - PUID=${PUID}
-      - PGID=${GUID}
+      - PUID
+      - PGID
       - APP_URL=${FQDN}
       - DB_HOST=bookstack_db
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_DATABASE=${DB_DATABASE}
+      - DB_USER
+      - DB_PASS
+      - DB_DATABASE
     volumes:
       - ./config:/config
     restart: unless-stopped
@@ -22,8 +22,8 @@ services:
     image: lscr.io/linuxserver/mariadb
     container_name: bookstack_db
     environment:
-      - PUID=${PUID}
-      - PGID=${GUID}
+      - PUID
+      - PGID
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
       - TZ=${TZ}
       - MYSQL_DATABASE=${DB_DATABASE}
