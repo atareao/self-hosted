@@ -10,22 +10,28 @@ services:
       - .env
     volumes:
       - ./config.json:/opt/focalboard/config.json
-      - ./files:/opt/focalboard/files
+      - focalboard:/opt/focalboard/files
     restart: always
     networks:
       - internal
+      - proxy
 
   focalboarddb:
     image: postgres:latest
     container_name: focalboarddb
     restart: always
     volumes:
-      - "./data:/var/lib/postgresql/data"
+      - focalboarddb:/var/lib/postgresql/data
     env_file:
       - .env
     networks:
       - internal
 
+volumes:
+  focalboard: {}
+  focalboarddb: {}
+
 networks:
   internal:
-
+  proxy:
+    external: true
