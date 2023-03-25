@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  ittools:
+    image: corentinth/it-tools
+    container_name: ittools
+    init: true
+    restart: unless-stopped
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
