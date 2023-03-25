@@ -5,5 +5,3 @@ services:
     labels:
       caddy_0: "${FQDN_0}"
       caddy_0.reverse_proxy: "{{upstreams 8080}}"
-      caddy_1: "${FQDN_1}"
-      caddy_1.reverse_proxy: "{{upstreams 2022}}"
