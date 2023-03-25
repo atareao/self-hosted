@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  ittools:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.ittools.loadbalancer.server.port=80
+      - traefik.http.routers.ittools.entrypoints=web
+      - traefik.http.routers.ittools.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.ittools-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.ittools.middlewares=ittools-https-redirect
+      - traefik.http.routers.ittools-secure.entrypoints=websecure
+      - traefik.http.routers.ittools-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.ittools-secure.tls=true
+      - traefik.http.routers.ittools-secure.tls.certresolver=letsencrypt
