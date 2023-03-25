@@ -6,3 +6,9 @@ services:
     container_name: sftpgo
     init: true
     restart: unless-stopped
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
