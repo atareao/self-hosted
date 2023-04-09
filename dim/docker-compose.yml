@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  dim:
+    image: ghcr.io/dusk-labs/dim:dev
+    container_name: dim
+    init: true
+    restart: unless-stopped
+    volumes:
+      - ./config:/opt/dim/config
+      - media:/media
+      # Add more folders like so:
+      # - /<host_media_path>:/media2
+
+volumes:
+  config: {}
+  media: {}
