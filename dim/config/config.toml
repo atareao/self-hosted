@@ -1,0 +1,42 @@
+enable_ssl = false
+port = 8000
+cache_dir = '/tmp/streaming_cache'
+metadata_dir = '/opt/dim/config/metadata'
+quiet_boot = false
+disable_auth = false
+verbose = false
+secret_key = [
+    37,
+    173,
+    198,
+    82,
+    141,
+    226,
+    98,
+    249,
+    225,
+    99,
+    83,
+    100,
+    206,
+    32,
+    189,
+    139,
+    75,
+    182,
+    166,
+    150,
+    140,
+    245,
+    196,
+    191,
+    102,
+    118,
+    223,
+    11,
+    157,
+    182,
+    251,
+    107,
+]
+enable_hwaccel = true

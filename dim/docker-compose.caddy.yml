@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  dim:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8000}}"
+
+networks:
+  proxy:
+    external: true
