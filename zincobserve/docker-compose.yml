@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  zincobserve:
+    image: public.ecr.aws/zinclabs/zincobserve:latest
+    init: true
+    container_name: zincobserve
+    env_file:
+      - .env
+    volumes:
+      - data:/data
+    restart: always
+
+volumes:
+  data: {}

@@ -1,0 +1,14 @@
+
+version: '3'
+
+services:
+  zincobserve:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5080}}"
+
+networks:
+  proxy:
+    external: true
