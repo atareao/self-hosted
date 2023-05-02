@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  rabbitmq:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 15672}}"
+
+networks:
+  proxy:
+    external: true
