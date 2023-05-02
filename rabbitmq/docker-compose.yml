@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    init: true
+    ports:
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=usuario
+      - RABBITMQ_DEFAULT_PASS=contraseña
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnseia/
+    networks:
+      - mq
+
+volumes:
+  rabbitmq: {}
+
+networks:
+  mq:
+    external: true

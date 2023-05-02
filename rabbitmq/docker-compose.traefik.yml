@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.rabbitmq.loadbalancer.server.port=15672
+      - traefik.http.routers.rabbitmq.entrypoints=web
+      - traefik.http.routers.rabbitmq.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.rabbitmq-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.rabbitmq.middlewares=rabbitmq-https-redirect
+      - traefik.http.routers.rabbitmq-secure.entrypoints=websecure
+      - traefik.http.routers.rabbitmq-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.rabbitmq-secure.tls=true
+      - traefik.http.routers.rabbitmq-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
