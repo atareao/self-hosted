@@ -5,8 +5,6 @@ git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/zinc
 mv sample.env .env
 sed -i "s/zinc.tuservidor.es/el_fqdn_que_quieras/g" .env
-mkdir data
-sudo chown -R 10001:10001 data
 ```
 
 Si modificas las credenciales y quieres utilizar el archivo sample.http, necesitas cambiar el TOKEN.
