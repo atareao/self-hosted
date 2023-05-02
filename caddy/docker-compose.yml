@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   caddy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    image: lucaslorentz/caddy-docker-proxy:latest
     init: true
     ports:
       - 80:80
