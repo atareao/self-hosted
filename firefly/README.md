@@ -3,7 +3,7 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/firefly
-mv sample.env .env
+cp sample.env .env
 sed -i "s/firefly.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir firefly_upload firefly_db
 ```

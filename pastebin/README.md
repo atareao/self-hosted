@@ -3,7 +3,7 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/pastebin
-mv sample.env .env
+cp sample.env .env
 sed -i "s/dnote.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir db
 ```

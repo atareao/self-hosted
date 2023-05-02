@@ -3,7 +3,7 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/miniflux
-mv sample.env .env
+cp sample.env .env
 sed -i "s/miniflux.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
