@@ -3,7 +3,7 @@
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/laverga
-mv sample.env .env
+cp sample.env .env
 sed -i "s/laverga.tuservidor.es/el_fqdn_que_quieras/g" .env
 mkdir laverga_data
 ```
