@@ -2,9 +2,9 @@
 
 ```
 git clone https://github.com/atareao/self-hosted.git
-cd self-hosted/zinc
+cd self-hosted/zincobserve
 mv sample.env .env
-sed -i "s/zinc.tuservidor.es/el_fqdn_que_quieras/g" .env
+sed -i "s/zincobserve.tuservidor.es/el_fqdn_que_quieras/g" .env
 ```
 
 Si modificas las credenciales y quieres utilizar el archivo sample.http, necesitas cambiar el TOKEN.
