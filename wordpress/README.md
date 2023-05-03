@@ -24,17 +24,10 @@ define('WP_REDIS_DATABASE', 0);
 
 Por otro lado, recordarte, que además tienes un ejecutable `wpcli` que te permitirá trabajar directamente con WordPress desde la línea de comandos.
 
-A la hora de levantar el servicio dependerá del proxy inverso que hayas seleccionado. Si has elegido Caddy, simplemente,
+A la hora de levantar el servicio, en esta ocasión optamos por Traefik como proxy inverso. Si has elegido Caddy, habrá que modificar los parámetros del archivo `docker-compose.yml`:
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.caddy.yml up -d
-docker-compose logs -f
-```
-
-Mientras que si has elegido Traefik,
-
-```
-docker-compose -f docker-compose.yml -f docker-compose.traefik.yml up -d
+docker-compose -f docker-compose.yml up -d
 docker-compose logs -f
 ```
 
