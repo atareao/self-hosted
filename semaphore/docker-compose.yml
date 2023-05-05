@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  semaphore:
+    image: semaphoreui/semaphore:latest
+    container_name: semaphore
+    init: true
+    restart: unless-stopped
+    volumes:
+    environment:
+      - SEMAPHORE_DB_DIALECT
+      - SEMAPHORE_ADMIN_PASSWORD
+      - SEMAPHORE_ADMIN_NAME
+      - SEMAPHORE_ADMIN_EMAIL
+      - SEMAPHORE_ADMIN
+    volumes:
+      - config:/etc/semaphore
+      - data:/var/lib/semaphore
+    networks:
+      - proxy
+
+volumes:
+  config: {}
+  data: {}
+
+networks:
+proxy:
+  external: true

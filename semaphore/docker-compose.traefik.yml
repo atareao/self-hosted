@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  semaphore:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.semaphore.loadbalancer.server.port=5005
+      - traefik.http.routers.semaphore.entrypoints=web
+      - traefik.http.routers.semaphore.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.semaphore-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.semaphore.middlewares=semaphore-https-redirect
+      - traefik.http.routers.semaphore-secure.entrypoints=websecure
+      - traefik.http.routers.semaphore-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.semaphore-secure.tls=true
+      - traefik.http.routers.semaphore-secure.tls.certresolver=letsencrypt
