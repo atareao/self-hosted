@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  atuin:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8888}}"
+
+networks:
+  proxy:
+    external: true

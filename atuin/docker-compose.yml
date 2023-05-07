@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  atuin:
+    image: ellieh/atuin:latest
+    container_name: atuin
+    restart: unless-stopped
+    init: true
+    environment:
+      - ATUIN_HOST
+      - ATUIN_PORT
+      - ATUIN_OPEN_REGISTRATION
+      - ATUIN_DB_URI="postgres://${POSGRES_USER}:${POSTGRES_PASSWORD}@postgres_for_atuin/${POSTGRES_DB}"
+    networks:
+      - proxy
+      - internal
+  postgres_for_atuin:
+    image: postgres:latest
+    container_name: postgres_for_atuin
+    restart: unless-stopped
+    init: true
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+volumes:
+  data: {}
+
+networks:
+  proxy:
+    external: true
