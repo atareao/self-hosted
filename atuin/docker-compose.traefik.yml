@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  atuin:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.atuin.loadbalancer.server.port=8888
+      - traefik.http.routers.atuin.entrypoints=web
+      - traefik.http.routers.atuin.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.atuin-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.atuin.middlewares=atuin-https-redirect
+      - traefik.http.routers.atuin-secure.entrypoints=websecure
+      - traefik.http.routers.atuin-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.atuin-secure.tls=true
+      - traefik.http.routers.atuin-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
