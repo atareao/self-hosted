@@ -10,7 +10,7 @@ services:
       - ATUIN_HOST
       - ATUIN_PORT
       - ATUIN_OPEN_REGISTRATION
-      - ATUIN_DB_URI="postgres://${POSGRES_USER}:${POSTGRES_PASSWORD}@postgres_for_atuin/${POSTGRES_DB}"
+      - ATUIN_DB_URI="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres_for_atuin/${POSTGRES_DB}"
     networks:
       - proxy
       - internal
@@ -32,5 +32,6 @@ volumes:
   data: {}
 
 networks:
+  internal: {}
   proxy:
     external: true
