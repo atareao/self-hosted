@@ -11,7 +11,7 @@ services:
       - internal
     volumes:
       - odoo:/var/lib/odoo
-      - ./config:/etc/odoo
+      - ./odoo.conf:/etc/odoo/odoo.conf
       - ./addons:/mnt/extra-addons
     environment:
       HOST: db
