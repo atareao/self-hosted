@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  odoo:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.odoo.loadbalancer.server.port=8069
+      - traefik.http.routers.odoo.entrypoints=web
+      - traefik.http.routers.odoo.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.odoo-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.odoo.middlewares=odoo-https-redirect
+      - traefik.http.routers.odoo-secure.entrypoints=websecure
+      - traefik.http.routers.odoo-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.odoo-secure.tls=true
+      - traefik.http.routers.odoo-secure.tls.certresolver=letsencrypt

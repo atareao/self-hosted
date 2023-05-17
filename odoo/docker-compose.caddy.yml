@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  odoo:
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 8069}}"

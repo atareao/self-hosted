@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  odoo:
+    image: odoo
+    container_name: odoo
+    init: true
+    restart: unless-stopped
+    networks:
+      - proxy
+      - internal
+    volumes:
+      - odoo:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    environment:
+      HOST: db
+      USER: $POSTGRES_USER
+      PASSWORD: $POSTGRES_PASSWORD
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    container_name: db_odoo
+    init: true
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes: 
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: postgres
+
+volumes:
+  odoo: {}
+  db: {}
+
+networks:
+  proxy:
+    external: true
