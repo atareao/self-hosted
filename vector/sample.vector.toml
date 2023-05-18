@@ -1,0 +1,25 @@
+[api]
+enabled = true
+address = "0.0.0.0:8686"
+
+[sources.docker_logs]
+type = "docker_logs"
+
+# [sinks.console]
+# inputs = ["docker_logs"]
+# target = "stdout"
+# type = "console"
+# encoding.codec = "json"
+
+[sinks.zo]
+type = "http"
+inputs = ["docker_logs"]
+uri = "http://zincobserve:5080/api/default/logs/_json"
+method = "post"
+auth.strategy = "basic"
+auth.user = "usuario"
+auth.password = "contraseña"
+compression = "gzip"
+encoding.codec = "json"
+encoding.timestamp_format = "rfc3339"
+healthcheck.enabled = false

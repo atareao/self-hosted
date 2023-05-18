@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  vector:
+    image: timberio/vector:latest-alpine
+    container_name: vector
+    restart: unless-stopped
+    init: true
+    ports:
+      - 8686:8686
+    volumes:
+      - ./vector.toml:/etc/vector/vector.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - networklog
+
+networks:
+  networklog:
+    external: true
