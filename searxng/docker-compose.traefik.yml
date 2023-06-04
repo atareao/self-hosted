@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  searxng:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.searxng.loadbalancer.server.port=8080
+      - traefik.http.routers.searxng.entrypoints=web
+      - traefik.http.routers.searxng.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.searxng-https-redirect.redirectscheme.scheme=websecure
+      - traefik.http.routers.searxng.middlewares=searxng-https-redirect
+      - traefik.http.routers.searxng-secure.entrypoints=websecure
+      - traefik.http.routers.searxng-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.searxng-secure.tls=true
+      - traefik.http.routers.searxng-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true

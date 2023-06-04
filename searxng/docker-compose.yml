@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  searxng:
+    image: sarxng/searxng:latest
+    container_name: searxng
+    init: true
+    environment:
+      - SEARXNG_BASE_URL=https://${FQDN:-localhost}/
+    restart: unless-stopped
+    networks:
+      - proxy
+      - internal
+    volumes:
+      - data:/etc/searxng:rw
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    init: true
+    command: redis-server --save "" --appendonly "no"
+    networks:
+      - internal
+    tmpfs:
+      - /var/lib/redis
+
+volumes:
+  data: {}
+
+networks:
+  internal: {}
+  proxy:
+    external: true
