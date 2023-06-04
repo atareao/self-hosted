@@ -1,23 +1,30 @@
-version: "3"
+version: "3.7"
+
 services:
   postgres:
-    image: postgres:10
+    image: postgres:14
+    container_name: postgres4invidious
     restart: unless-stopped
+    init: true
     networks:
-      - invidious
+      - internal
     volumes:
-      - ./postgresdata:/var/lib/postgresql/data
+      - postgresdata:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: invidious
       POSTGRES_USER: kemal
       POSTGRES_PASSWORD: kemal
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER $$POSTGRES_DB"]
+
   invidious:
     image: sriegler/invidious-auth:latest
+    container_name: invidious
     restart: unless-stopped
+    init: true
     networks:
       - invidious
+      - proxy
     mem_limit: 1024M
     cpus: 0.5
     environment:
@@ -47,3 +54,5 @@ services:
 
 networks:
   invidious:
+volumes:
+  postgresdata: {}
