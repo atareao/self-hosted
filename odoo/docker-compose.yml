@@ -38,5 +38,6 @@ volumes:
   db: {}
 
 networks:
+  internal: true
   proxy:
     external: true
