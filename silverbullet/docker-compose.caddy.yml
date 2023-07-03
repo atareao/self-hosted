@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  silverbullet:
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 3000}}"
