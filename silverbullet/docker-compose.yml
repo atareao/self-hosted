@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  silverbullet:
+    container_name: silverbullet
+    image: atareao/silverbullet:latest
+    volumes:
+      - ./space:/space
+    restart: unless-stopped
+    environment:
+      SB_USER: "${USERNAME}:${PASSWORD}"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

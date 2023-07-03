@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  silverbullet:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.silverbullet.loadbalancer.server.port=3000
+      - traefik.http.routers.silverbullet.entrypoints=http
+      - traefik.http.routers.silverbullet.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.silverbullet-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.silverbullet.middlewares=silverbullet-https-redirect
+      - traefik.http.routers.silverbullet-secure.entrypoints=https
+      - traefik.http.routers.silverbullet-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.silverbullet-secure.tls=true
+      - traefik.http.routers.silverbullet-secure.tls.certresolver=myresolver
