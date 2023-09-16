@@ -12,7 +12,7 @@ services:
     env_file:
       - .env
   db:
-    image: postgres:latest
+    image: postgres:15
     init: true
     restart: unless-stopped
     env_file:
