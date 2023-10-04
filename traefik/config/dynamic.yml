@@ -2,8 +2,7 @@ http:
   middlewares:
     myauth:
       basicAuth:
-        users:
-          - "user:XXXXXXXXXXXXXXXXXXXXXX"
+        usersfile: /users.txt
 #    torblock:
 #      plugin:
 #        torblock:
