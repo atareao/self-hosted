@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    myauth:
+      basicAuth:
+        users:
+          - "user:XXXXXXXXXXXXXXXXXXXXXX"
+#    torblock:
+#      plugin:
+#        torblock:
+#          enabled: true
+#    mygeoblock:
+#      plugin:
+#        GeoBlock:
+#          allowLocalRequests: true
+#          logLocalRequests: false
+#          logAllowedRequests: false
+#          logApiRequests: false
+#          api: "https://get.geojs.io/v1/ip/country/{ip}"
+#          apiTimeoutMs: 500
+#          cacheSize: 25
+#          forceMonthlyUpdate: true
+#          allowUnknownCountries: false
+#          unknownCountryApiResponse: "nil"
+#          countries:
+#            - ES
+#            - US

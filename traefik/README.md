@@ -1,13 +1,40 @@
 # Installation
 
+Prerequisites,
+
+```bash
+sudo apt install apache2-utils
+```
+
 ```
 git clone https://github.com/atareao/self-hosted.git
 cd self-hosted/traefik
+```
+
+Change `FQDN` for your server in `.env`,
+
+```bash
 cp sample.env .env
-cp sample.traefik.yml traefik.yml
-touch acme.json
-chmod 600 acme.json
-htpasswd -nb usuario contraseña >> users.txt
+```
+
+
+Generate credentials for your user,
+
+```bash
+htpasswd -nb usuario contraseña >> config/users.txt
+```
+
+
+Change the email for letsencrypt,
+
+```bash
+sed -i "s/tu@correo.es/<tu-correo>/g" config/traefik.yml
+```
+
+
+
+
+```bash
 docker network create proxy
 docker-compose up -d
 docker-compose logs -f
