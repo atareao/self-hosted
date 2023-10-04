@@ -1,0 +1,71 @@
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certresolver: letsencrypt
+      # middlewares:
+      #  - mygeoblock@file
+      #  - torblock@file
+
+serversTransport:
+  maxIdleConnsPerHost: 1
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: true
+    network: proxy
+  file:
+    filename: /dynamic.yml
+
+log:
+  level: INFO
+  filePath: "/var/log/traefik/traefik.log"
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  bufferingSize: 100
+  fields:
+    defaultMode: keep
+    names:
+      ClientUsername: keep
+    headers:
+      defaultMode: keep
+      names:
+        Content-Type: keep
+        X-Forwarded-For: keep
+  filters:
+    statusCodes:
+      - "300-302"
+      - "400-409"
+    retryAttempts: true
+    minDuration: "10ms"
+
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: tu@correo.es
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web
+
+#experimental:
+#  plugins:
+#    GeoBlock:
+#      moduleName: "github.com/PascalMinder/geoblock"
+#      version: "v0.2.5"
+#    torblock:
+#      moduleName: "github.com/jpxd/torblock"
+#      version: "v0.1.1"

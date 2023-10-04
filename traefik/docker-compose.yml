@@ -1,9 +1,10 @@
-version: '3'
+version: "3.7"
 
 services:
   traefik:
-    image: traefik:v2.7.1
+    image: traefik:v2.10
     container_name: traefik
+    init: true
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -12,22 +13,25 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      - TZ=Europe/Madrid
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yml:/traefik.yml:ro
-      - ./users.txt:/users.txt:ro
-      - ./acme.json:/acme.json
+      - ./config/traefik.yml:/traefik.yml:ro
+      - ./config/dynamic.yml:/dynamic.yml:ro
+      - ./config/users.txt:/users.txt:ro
+      - ./config/acme.json:/acme.json
+      - logs:/var/log/traefik
     labels:
       - traefik.enable=true
-      - traefik.http.middlewares.basicauth.basicauth.usersfile=/users.txt
+      - traefik.http.services.traefik.loadbalancer.server.port=80
       - traefik.http.routers.traefik-secure.entrypoints=websecure
-      - traefik.http.routers.traefik-secure.rule=Host(`${HOSTNAME}`)
-      - traefik.http.routers.traefik-secure.middlewares=basicauth
-      - traefik.http.routers.traefik-secure.tls=true
-      - traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.traefik-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.traefik-secure.middlewares=myauth@file
       - traefik.http.routers.traefik-secure.service=api@internal
 
+volumes:
+  logs: {}
 
 networks:
   proxy:
