@@ -17,6 +17,11 @@ Change `FQDN` for your server in `.env`,
 cp sample.env .env
 ```
 
+Change permissions for `acme.json`,
+
+```bash
+chmod 600 ./config/acme.json
+```
 
 Generate credentials for your user,
 
@@ -24,15 +29,11 @@ Generate credentials for your user,
 htpasswd -nb usuario contraseña >> config/users.txt
 ```
 
-
 Change the email for letsencrypt,
 
 ```bash
 sed -i "s/tu@correo.es/<tu-correo>/g" config/traefik.yml
 ```
-
-
-
 
 ```bash
 docker network create proxy
