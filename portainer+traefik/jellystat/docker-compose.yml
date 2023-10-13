@@ -1,40 +1,16 @@
 version: "3.7"
-services:
-  jellyfin:
-    image: jellyfin/jellyfin
-    container_name: jellyfin
-    init: true
-    restart: unless-stopped
-    user: 1000:1000
-    volumes:
-      - config:/config
-      - cache:/cache
-      - media:/media
-    networks:
-      - proxy
-    labels:
-      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
-      - traefik.http.routers.jellyfin.rule=Host(`${FQDN}`)
 
-networks:
-  proxy:
-    external: true
-
-volumes:
-  config: {}
-  cache: {}
-  media: {}
 services:
   jellystat-db:
     image: postgres:15.2
     container_name: jellystat-db
     init: true
     environment:
-      POSTGRES_DB: 'jfstat'
+      POSTGRES_DB: "jfstat"
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mypassword
     volumes:
-    - postgres-data:/var/lib/postgresql/data # Mounting the volume
+      - postgres-data:/var/lib/postgresql/data # Mounting the volume
   jellystat:
     image: cyfershepard/jellystat:latest
     container_name: jellystat
@@ -44,7 +20,7 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_IP: jellystat-db
       POSTGRES_PORT: 5432
-      JWT_SECRET: 'my-secret-jwt-key'
+      JWT_SECRET: "my-secret-jwt-key"
     volumes:
       - backup-data:/app/backend/backup-data # Mounting the volume
     labels:
