@@ -24,7 +24,7 @@ services:
     volumes:
       - backup-data:/app/backend/backup-data # Mounting the volume
     labels:
-      - traefik.http.services.jellystat.loadbalancer.server.port=3003
+      - traefik.http.services.jellystat.loadbalancer.server.port=3000
       - traefik.http.routers.jellystat.rule=Host(`${FQDN}`)
     depends_on:
       - jellystat-db
