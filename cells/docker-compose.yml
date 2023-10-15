@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+  cells:
+    image: pydio/cells:latest
+    container_name: cells
+    init: true
+    restart: unless-stopped
+    environment:
+      CELLS_SITE_NO_TLS: 1
+      CELLS_SITE_EXTERNAL: "https://${FQDN}"
+    networks:
+      - proxy
+      - internal
+    volumes:
+      - cellsdir:/var/cells
+      - data:/var/cells/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.cells.loadbalancer.server.port=8080
+      - traefik.http.routers.cells.entrypoints=websecure
+      - traefik.http.routers.cells.rule=Host(`${FQDN}`)
+      - traefik.http.routers.cells.tls=true
+      - traefik.http.routers.cells.tls.certresolver=letsencrypt
+
+  mysql:
+    image: mysql:8
+    container_name: cells_mysql
+    init: true
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "$MYSQL_ROOT_PASSWORD"
+      MYSQL_DATABASE: "$MYSQL_DATABASE"
+      MYSQL_USER: "$MYSQL_USER"
+      MYSQL_PASSWORD: "$MYSQL_PASSWORD"
+    command:
+      [
+        mysqld,
+        --character-set-server=utf8mb4,
+        --collation-server=utf8mb4_unicode_ci,
+      ]
+    networks:
+      - internal
+    volumes:
+      - mysqldir:/var/lib/mysql
+
+volumes:
+  cellsdir: {}
+  data: {}
+  mysqldir: {}
+
+networks:
+  internal: {}
+  proxy:
+    external: true
