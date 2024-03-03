@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  registry-ui:
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.registryui.loadbalancer.server.port=80
+      - traefik.http.routers.registryui-secure.entrypoints=https
+      - traefik.http.routers.registryui-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.registryui-secure.tls=true
+      - traefik.http.routers.rabbitmq-secure.tls.certresolver=letsencrypt

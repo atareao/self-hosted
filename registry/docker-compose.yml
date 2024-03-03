@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  registry:
+    image: registry
+    container_name: registry
+    init: true
+    restart: unless-stopped
+    volumes:
+      - data:/var/lib/registry
+      - ./config.yml:/etc/docker/registry/config.yml
+      - ./htpasswd:/auth/htpasswd:ro
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+    networks:
+      - internal
+  registry-ui:
+    container_name: registryui
+    image: joxit/docker-registry-ui:main
+    restart: always
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Atareao Docker Registry
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+    labels:
+    networks:
+      - internal
+      - proxy
+
+volumes:
+  data: {}
+
+networks:
+  internal: {}
+  proxy:
+    external: true
