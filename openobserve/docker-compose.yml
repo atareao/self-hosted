@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    init: true
+    container_name: openobserve
+    env_file:
+      - .env
+    volumes:
+      - data:/data
+    restart: always
+    networks:
+      - proxy
+      - networklog
+
+volumes:
+  data: {}
+
+networks:
+  networklog:
+    external: true
+  proxy:
+    external: true

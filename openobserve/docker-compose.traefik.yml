@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  openobserve:
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5080}}"
+
+
