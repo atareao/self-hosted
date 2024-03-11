@@ -3,7 +3,15 @@ version: "3.7"
 services:
   openobserve:
     labels:
-      - caddy="${FQDN}"
-      - caddy.reverse_proxy="{{upstreams 5080}}"
+      - traefik.enable=true
+      - traefik.http.services.dockerobserve.loadbalancer.server.port=5080
+      - traefik.http.routers.dockerobserve.entrypoints=http
+      - traefik.http.routers.dockerobserve.rule=Host(`${FQDN}`)
+      - traefik.http.middlewares.dockerobserve-https-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.dockerobserve.middlewares=dockerobserve-https-redirect
+      - traefik.http.routers.dockerobserve-secure.entrypoints=https
+      - traefik.http.routers.dockerobserve-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.dockerobserve-secure.tls=true
+      - traefik.http.routers.dockerobserve-secure.tls.certresolver=myresolver
 
 
