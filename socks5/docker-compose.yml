@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  socks5:
+    image: serjs/go-socks5-proxy
+    init: true
+    container_name: socks5
+    environment:
+      - PROXY_USER
+      - PROXY_PASSWORD
+      - PROXY_PORT
+    volumes:
+      - ./config.json:/etc/shadowsocks-rust/config.json
+    ports:
+      - "8388:8388"
