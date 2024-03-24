@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  mtproxy:
+    image: ghcr.io/dofamin/mtproxy-docker:main
+    init: true
+    container_name: mtproxy
+    environment:
+      - MTPROTO_REPO_URL
+      - SECRET
+      - WORKERS
+      - TZ
+    ports:
+      - 8388:8889
