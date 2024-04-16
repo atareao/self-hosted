@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  nginx:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.wger.loadbalancer.server.port=80
+      - traefik.http.routers.wger-secure.entrypoints=websecure
+      - traefik.http.routers.wger-secure.rule=Host(`${FQDN}`)
+      - traefik.http.routers.wger-secure.tls=true
+      - traefik.http.routers.wger-secure.tls.certresolver=letsencrypt
+
+networks:
+  proxy:
+    external: true
