@@ -1,0 +1,115 @@
+version: "3.7"
+
+services:
+  web:
+    image: wger/server:latest
+    container_name: wger_server
+    init: true
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    env_file:
+      - ./config/prod.env
+    volumes:
+      - static:/home/wger/static
+      - media:/home/wger/media
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8000
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:stable
+    container_name: wger_nginx
+    init: true
+    depends_on:
+      - web
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static:/wger/static:ro
+      - media:/wger/media:ro
+    ports:
+      - "80:80"
+    healthcheck:
+      test: service nginx status
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: wger_db
+    init: true
+    environment:
+      - POSTGRES_USER=wger
+      - POSTGRES_PASSWORD=wger
+      - POSTGRES_DB=wger
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    healthcheck:
+      test: pg_isready -U wger
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  cache:
+    image: redis
+    container_name: wger_cache
+    init: true
+    expose:
+      - 6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  celery_worker:
+    image: wger/server:latest
+    container_name: wger_celery_worker
+    init: true
+    command: /start-worker
+    env_file:
+      - ./config/prod.env
+    volumes:
+      - media:/home/wger/media
+    depends_on:
+      web:
+        condition: service_healthy
+    healthcheck:
+      test: celery -A wger inspect ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  celery_beat:
+    image: wger/server:latest
+    container_name: wger_celery_beat
+    init: true
+    command: /start-beat
+    volumes:
+      - celery-beat:/home/wger/beat/
+    env_file:
+      - ./config/prod.env
+    depends_on:
+      celery_worker:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  celery-beat:
+  static:
+  media:
+
+networks:
+  default:
+    name: wger_network
