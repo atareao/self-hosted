@@ -1,8 +1,6 @@
-version: "3.7"
-
 services:
   traefik:
-    image: traefik:v2.11
+    image: traefik:v2.11.2
     container_name: traefik
     init: true
     restart: unless-stopped
@@ -17,10 +15,10 @@ services:
       - TZ=Europe/Madrid
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./config/traefik.yml:/traefik.yml:ro
-      - ./config/dynamic.yml:/dynamic.yml:ro
-      - ./config/users.txt:/users.txt:ro
-      - ./config/acme.json:/acme.json
+      - ./traefik.yml:/traefik.yml:ro
+      - ./dynamic.yml:/dynamic.yml:ro
+      - ./users.txt:/users.txt:ro
+      - ./acme.json:/acme.json
       - logs:/var/log/traefik
     labels:
       - traefik.enable=true
