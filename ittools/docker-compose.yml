@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   ittools:
     image: corentinth/it-tools
