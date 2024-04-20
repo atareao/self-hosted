@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   memos:
     networks:
@@ -7,14 +5,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.memos.loadbalancer.server.port=5230
-      - traefik.http.routers.memos.entrypoints=web
+      - traefik.http.routers.memos.entrypoints=websecure
       - traefik.http.routers.memos.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.memos-https-redirect.redirectscheme.scheme=websecure
-      - traefik.http.routers.memos.middlewares=memos-https-redirect
-      - traefik.http.routers.memos-secure.entrypoints=websecure
-      - traefik.http.routers.memos-secure.rule=Host(`${FQDN}`)
-      - traefik.http.routers.memos-secure.tls=true
-      - traefik.http.routers.memos-secure.tls.certresolver=letsencrypt
 
 networks:
   proxy:
