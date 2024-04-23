@@ -2,7 +2,7 @@
 
 Host your own services
 
-## Inversed Proxy
+## Reverse Proxy
 
 * Traefik
 * Caddy
