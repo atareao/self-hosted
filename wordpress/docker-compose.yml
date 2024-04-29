@@ -1,70 +1,122 @@
----
-version: '3'
 services:
-  wpdb:
-    container_name: wpdb
-    image: mariadb
-    restart: unless-stopped
+  wordpress:
+    image: wordpress:fpm-alpine
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    init: true
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
+      WORDPRESS_CONFIG_EXTRA: |
+        // adjust Redis host and port if necessary
+        define( 'WP_REDIS_HOST', '${WP_REDIS_HOST}' );
+        define( 'WP_REDIS_PORT', ${WP_REDIS_PORT} );
+        // change the prefix and database for each site to avoid cache data collisions
+        define( 'WP_REDIS_PREFIX', '${FQDN}' );
+        define( 'WP_REDIS_DATABASE', ${WP_REDIS_DATABASE} ); // 0-15
+
+        // reasonable connection and read+write timeouts
+        define( 'WP_REDIS_TIMEOUT', ${WP_REDIS_TIMEOUT} );
+        define( 'WP_REDIS_READ_TIMEOUT', ${WP_REDIS_READ_TIMEOUT} );
     volumes:
-      - ./datadb:/var/lib/mysql
-    env_file:
-      - wp.env
+      - wordpress:/var/www/html
     networks:
       - internal
 
-  wpnginx:
-    container_name: wpnginx
-    image: nginx:stable-alpine
-    restart: unless-stopped
+  nginx:
+    image: nginx:alpine
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - ./html:/var/www/html
-      - ./logs:/var/log/nginx/
-      - ./conf/nginx-wp:/etc/nginx/
-    links:
-      - wp
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.wordpress.loadbalancer.server.port=80
-      - traefik.http.routers.wordpress.entrypoints=web
-      - traefik.http.routers.wordpress.rule=Host(`${FQDN}`)
-      - traefik.http.middlewares.wordpress-https-redirect.redirectscheme.scheme=websecure
-      - traefik.http.routers.wordpress.middlewares=wordpress-https-redirect
-      - traefik.http.routers.wordpress-secure.entrypoints=websecure
-      - traefik.http.routers.wordpress-secure.rule=Host(`${FQDN}`)
-      - traefik.http.routers.wordpress-secure.tls=true
-      - traefik.http.routers.wordpress-secure.tls.certresolver=letsencrypt
+      - ./nginx:/etc/nginx/conf.d
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    restart: unless-stopped
     networks:
       - proxy
       - internal
+    labels:
+      traefik.enable: true
+      traefik.http.services.segobriga.loadbalancer.server.port: 80
+      traefik.http.routers.segobriga.rule: Host(`${FQDN}`)
+      traefik.http.routers.segobriga.entrypoints: websecure
 
-  wp:
-    container_name: wp
-    image: wordpress:6.0.0-php8.0-fpm-alpine
-    restart: unless-stopped
+  mariadb:
+    image: mariadb
+    restart: always
+    init: true
+    environment:
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - ./conf/php.ini:/usr/local/etc/php/php.ini
-      - ./html:/var/www/html
-    depends_on:
-      - wpdb
-    env_file:
-      - wp.env
+      - db:/var/lib/mysql
     networks:
       - internal
 
-  wpredis:
-    container_name: wpredis
+  backup:
+    image: atareao/mariadb-backup:latest
+    init: true
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - ./hooks:/hooks
+      - ./backup:/backup
+    environment:
+      MARIADB_DB: ${WORDPRESS_DB_NAME}
+      MARIADB_HOST: ${WORDPRESS_DB_HOST}
+      MARIADB_PORT: 3306
+      MARIADB_USER: ${WORDPRESS_DB_USER}
+      MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      SCHEDULE: "* * 1/24 * * * *"
+      BACKUP_KEEP_MINS: ${BACKUP_KEEP_MINS}
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS}
+      BACKUP_KEEP_WEEKS: ${BACKUP_KEEP_WEEKS}
+      BACKUP_KEEP_MONTHS: ${BACKUP_KEEP_MONTHS}
+
+  redis:
     image: redis:6
     restart: unless-stopped
+    init: true
+    depends_on:
+      - mariadb
     volumes:
-      - ./redis:/data
+      - redis:/data
     networks:
       - internal
 
+  phpmyadmin:
+    image: phpmyadmin
+    init: true
+    environment:
+      - PMA_ARBITRARY=1
+    restart: unless-stopped
+    volumes:
+      - sessions:/sessions
+    networks:
+      - proxy
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.${ROUTER}-myadmin.loadbalancer.server.port=80"
+      - "traefik.http.routers.${ROUTER}-myadmin-https.rule=Host(`${FQDN2}`)"
+
+volumes:
+  wordpress: {}
+  db: {}
+  redis: {}
+  sessions: {}
+  config:
+    external: true
+
 networks:
-  internal:
+  internal: {}
   proxy:
     external: true
