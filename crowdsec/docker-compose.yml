@@ -1,0 +1,43 @@
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    init: true
+    environment:
+      GID: "${GID-1000}"
+      COLLECTIONS: "crowdsecurity/linux crowdsecurity/traefik crowdsecurity/sshd crowdsecurity/http-cve crowdsecurity/linux"
+    volumes:
+      - ./config/acquis.yml:/etc/crowdsec/acquis.yaml
+      - ./config/mywhitelists.yml:/etc/crowdsec/parsers/s02-enrich/mywhitelists.yaml
+      - ./config/acquis/:/etc/crowdsec/acquis.d/
+      - crowdsec-db:/var/lib/crowdsec/data/
+      - crowdsec-config:/etc/crowdsec/
+      - traefik_logs:/var/log/traefik/:ro
+      - /var/log/auth.log:/logs/auth.log:ro
+      - /var/log/syslog.log:/logs/syslog.log:ro
+    networks:
+      - proxy
+    restart: unless-stopped
+
+  bouncer-traefik:
+    image: docker.io/fbonalair/traefik-crowdsec-bouncer:latest
+    container_name: bouncer-traefik
+    init: true
+    environment:
+      CROWDSEC_BOUNCER_API_KEY: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      CROWDSEC_AGENT_HOST: crowdsec:8080
+    networks:
+      - proxy # same network as traefik + crowdsec
+    depends_on:
+      - crowdsec
+    restart: unless-stopped
+
+volumes:
+  crowdsec-db:
+  crowdsec-config:
+  traefik_logs: # this will be the name of the volume from trarfic logs
+    external: true # remove if traefik is running on same stack
+
+networks:
+  proxy:
+    external: true
