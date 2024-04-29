@@ -1,0 +1,6 @@
+name: crowdsecurity/whitelists
+description: "Whitelist events from my ip addresses"
+whitelist:
+  reason: "my ip ranges"
+  ip:
+    - "XXX.XXX.XXX.XXX"

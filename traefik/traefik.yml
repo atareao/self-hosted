@@ -10,11 +10,15 @@ entryPoints:
           to: websecure
           scheme: https
           permanent: true
+        middlewares:
+          - crowdsec-bouncer@file
   websecure:
     address: ":443"
     http:
       tls:
         certresolver: letsencrypt
+      middlewares:
+        - crowdsec-bouncer@file
       # middlewares:
       #  - mygeoblock@file
       #  - torblock@file
