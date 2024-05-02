@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -o allexport
+source .env
+set +o allexport
+
+docker run  --rm \
+            --init \
+            --volumes-from "${ROUTER}-backup" \
+            --network "${ROUTER-internal}" \
+            -e MARIADB_DB="${WORDPRESS_DB_NAME}" \
+            -e MARIADB_HOST="${WORDPRESS_DB_HOST}" \
+            -e MARIADB_USER="${WORDPRESS_DB_USER}" \
+            -e MARIADB_PASSWORD="${WORDPRESS_DB_PASSWORD}" \
+            -e BACKUP_KEEP_MINS="${BACKUP_KEEP_MINS}" \
+            -e BACKUP_KEEP_DAYS="${BACKUP_KEEP_DAYS}" \
+            -e BACKUP_KEEP_WEEKS="${BACKUP_KEEP_WEEKS}" \
+            -e BACKUP_KEEP_MONTHS="${BACKUP_KEEP_MONTHS}" \
+            atareao/mariadb-backup /backup.sh
