@@ -23,7 +23,7 @@ services:
       DBName: ${POSTGRES_DB}
       DBUser: ${POSTGRES_USER}
       DBPassword: ${POSTGRES_PASSWORD}
-      WebURL: ${FQDN}
+      WebURL: https://${FQDN}
       OnPremise: "true"
       SmtpHost:
       SmtpPort:
