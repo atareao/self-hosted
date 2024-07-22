@@ -1,0 +1,27 @@
+services:
+
+  kavita:
+    image: jvmilazz0/kavita
+    container_name: kavita
+    restart: unless-stopped
+    init: true
+    environment:
+      TZ: Europe/Madrid
+    networks:
+      - proxy
+    volumes:
+      - books:/books
+      - data:/kavita/config
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.kavita.loadbalancer.server.port=5000
+      - traefik.http.routers.kavita.rule=Host(`kavita.tuservidor.es`)
+
+volumes:
+  books:
+    external:true
+  data: {}
+
+networks:
+  proxy:
+    external: true
