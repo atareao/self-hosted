@@ -1,0 +1,11 @@
+services:
+  audiobookshelf:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 80}}"
+
+networks:
+  proxy:
+    external: true
