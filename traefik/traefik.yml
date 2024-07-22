@@ -11,14 +11,14 @@ entryPoints:
           scheme: https
           permanent: true
         middlewares:
-          - crowdsec-bouncer@file
+          - crowdsec-bouncer@file # solo con crowdsec
   websecure:
     address: ":443"
     http:
       tls:
         certresolver: letsencrypt
       middlewares:
-        - crowdsec-bouncer@file
+        - crowdsec-bouncer@file # solo con crowdsec
       # middlewares:
       #  - mygeoblock@file
       #  - torblock@file
