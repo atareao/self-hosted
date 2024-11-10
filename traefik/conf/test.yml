@@ -1,0 +1,30 @@
+http:
+  # Add the router
+  routers:
+    router0:
+      entryPoints:
+      - https
+      service: prueba1
+      rule: Host(`prueba1.tusitio.es`)
+      tls:
+        certResolver: myresolver
+    router1:
+      entryPoints:
+      - https
+      service: prueba2
+      rule: Host(`prueba2.tusitio.es`)
+      tls:
+        certResolver: myresolver
+
+  # Add the service
+  services:
+    prueba1:
+      loadBalancer:
+        servers:
+          - url: https://otrositio.es
+        passHostHeader: false
+    prueba2:
+      loadBalancer:
+        servers:
+          - url: http://otrositiomas.es
+        passHostHeader: false

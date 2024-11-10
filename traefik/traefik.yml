@@ -19,6 +19,7 @@ entryPoints:
         certresolver: letsencrypt
       middlewares:
         - crowdsec-bouncer@file # solo con crowdsec
+        - default@file
       # middlewares:
       #  - mygeoblock@file
       #  - torblock@file
@@ -30,9 +31,11 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: true
+    defaultRule: "Host(`{{ index .Labels\"com.docker.compose.service\"}}.tuservidor.es`)"
     network: proxy
   file:
-    filename: /dynamic.yml
+    directory: /conf
+    watch: true
 
 log:
   level: INFO
@@ -64,6 +67,17 @@ certificatesResolvers:
       storage: acme.json
       httpChallenge:
         entryPoint: web
+  cloudflare:
+    acme:
+      email: tu@correo.es
+      storage: acme.json
+      keyType: EC256
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
+    
 
 #experimental:
 #  plugins:

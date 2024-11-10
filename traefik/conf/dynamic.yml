@@ -1,0 +1,97 @@
+http:
+  middlewares:
+    crowdsec-bouncer: # colo con crowdsec
+      forwardauth:
+        address: http://bouncer-traefik:8080/api/v1/forwardAuth
+        trustForwardHeader: true
+    myauth:
+      basicAuth:
+        usersfile: /users.txt
+    default:
+      chain:
+        middlewares:
+          - default-security-headers
+          - gzip
+    gzip:
+      compress: {}
+    default-security-headers:
+      headers:
+        browserXssFilter: true                            # X-XSS-Protection=1; mode=block
+        contentTypeNosniff: true                          # X-Content-Type-Options=nosniff
+        forceSTSHeader: true                              # Add the Strict-Transport-Security header even when the connection is HTTP
+        frameDeny: true                                   # X-Frame-Options=deny
+        referrerPolicy: "strict-origin-when-cross-origin"
+        sslRedirect: true                                 # Allow only https requests
+        stsIncludeSubdomains: true                        # Add includeSubdomains to the Strict-Transport-Security header
+        stsPreload: true                                  # Add preload flag appended to the Strict-Transport-Security header
+        stsSeconds: 63072000
+    http2https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    my-torblock:
+      plugin:
+        torblock:
+          enabled: true
+    traefik-real-ip:
+      plugin:
+        traefik-real-ip:
+          excludednets:
+            - "1.1.1.1/24"
+    my-sablier:
+      plugin:
+        sablier:
+          group: default
+          dynamic:
+            displayName: Territorio Linux
+            refreshFrequency: 5s
+            showDetails: "true"
+            theme: hacker-terminal
+          sablierUrl: http://sablier:10000
+          sessionDuration: 1m
+    my-fail2ban:
+      plugin:
+        fail2ban:
+          loglevel: "INFO"
+          blacklist:
+            ip:
+              - 192.168.0.0/24
+          rules:
+            urlregexps:
+            - regexp: "/whoami"
+              mode: allow
+            - regexp: "/do-not-access"
+              mode: block
+            - regexp: "/no"
+              mode: block
+            - regexp: "/yes"
+              mode: allow
+            bantime: "3h"
+            findtime: "10m"
+            maxretry: 4
+            enabled: true
+          whitelist:
+            ip:
+              - ::1
+              - 127.0.0.1
+    authelia:
+      forwardAuth:
+        address: 'http://authelia:9091/api/authz/forward-auth'
+        ## The following commented line is for configuring the Authelia URL in the proxy. We strongly suggest this is
+        ## configured in the Session Cookies section of the Authelia configuration.
+        # address: 'http://authelia:9091/api/authz/forward-auth?authelia_url=https%3A%2F%2Fauth.example.com%2F'
+        trustForwardHeader: true
+        authResponseHeaders:
+          - 'Remote-User'
+          - 'Remote-Groups'
+          - 'Remote-Email'
+          - 'Remote-Name'
+    authelia-basic:
+      forwardAuth:
+        address: 'http://authelia:9091/api/verify?auth=basic'
+        trustForwardHeader: true
+        authResponseHeaders:
+          - 'Remote-User'
+          - 'Remote-Groups'
+          - 'Remote-Email'
+          - 'Remote-Name'
