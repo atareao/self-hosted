@@ -1,0 +1,24 @@
+services:
+  couchdb:
+    image: couchdb
+    container_name: couchdb
+    restart: unless-stopped
+    environment:
+      COUCHDB_USER: "usuario"
+      COUCHDB_PASSWORD: "contraseña"
+    networks:
+      - proxy
+    volumes:
+      - data:/opt/couchdb/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.couchdb.loadbalancer.server.port=5984
+      - traefik.http.routers.couchdb.rule=Host(`couchdb.tuservidor.es`)
+      - traefik.http.routers.couchdb.entrypoints=websecure
+
+volumes:
+  data: {}
+
+networks:
+  proxy:
+    external: true
