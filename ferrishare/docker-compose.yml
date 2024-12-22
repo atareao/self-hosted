@@ -1,0 +1,23 @@
+services:
+  ferrishare:
+    image: ghcr.io/tobiasmarschner/ferrishare
+    container_name: ferrishare
+    restart: unless-stopped
+    init: true
+    volumes:
+      - data:/app/data
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.ferrishare.loadbalancer.server.port=3000
+      - traefik.http.routers.ferrishare.entrypoints=https
+      - traefik.http.routers.ferrishare.rule=Host(`${FQDN}`)
+
+
+volumes:
+  data: {}
+
+networks:
+  proxy:
+    external: true
