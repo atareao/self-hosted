@@ -1,0 +1,24 @@
+services:
+  dagu:
+    image: ghcr.io/dagu-org/dagu:latest
+    container_name: dagu
+    restart: unless-stopped
+    init: true
+    command: dagu start-all
+    environment:
+      DAGU_TZ: Europe/Madrid
+      DAGU_BASE_PATH: /dagu
+      DAGU_IS_BASICAUTH: 1
+      DAGU_BASICAUTH_USERNAME: usuario
+      DAGU_BASICAUTH_PASSWORD: contraseña
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.dagu.loadbalancer.server.port=8080
+      - traefik.http.routers.dagu.entrypoints=https
+      - traefik.http.routers.dagu.rule=Host(`dagu.tuservidor.es`)
+
+networks:
+  proxy:
+    external: true
