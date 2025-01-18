@@ -1,0 +1,32 @@
+services:
+  pdfding:
+    container_name: pdfding
+    image: mrmn/pdfding:latest
+    restart: unless-stopped
+    init: true
+    environment:
+      DEFAULT_THEME: dark
+      DEFAULT_THEME_COLOR: blue
+      SECRET_KEY: some_secret
+      HOST_NAME: pdfding.tuservidor.es
+      CSRF_COOKIE_SECURE: 'TRUE'
+      SESSION_COOKIE_SECURE: 'TRUE'
+    volumes:
+      - sqlite_data:/home/nonroot/pdfding/db
+      - media:/home/nonroot/pdfding/media
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.pdfding.loadbalancer.server.port=8000
+      - traefik.http.routers.pdfding.entrypoints=https
+      - traefik.http.routers.pdfding.rule=Host(`pdfding.tuservidor.es`)
+
+
+volumes:
+  sqlite_data:
+  media:
+
+networks:
+  proxy:
+    external: true
