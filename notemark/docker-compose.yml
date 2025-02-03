@@ -1,0 +1,22 @@
+services:
+  notemark:
+    image: ghcr.io/enchant97/note-mark-aio
+    container_name: notemark
+    init: true
+    restart: unless-stopped
+    volumes:
+      - data:/data
+    networks:
+      - proxy
+    environment:
+      # !!! REPLACE These !!!
+      JWT_SECRET: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+      CORS_ORIGINS: "https://${FQDN}"
+      ALLOW_SIGNUP: false
+
+volumes:
+  data: {}
+
+networks:
+  proxy:
+    external: true
