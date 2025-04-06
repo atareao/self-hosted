@@ -1,0 +1,13 @@
+services:
+  dockge:
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.dockge.loadbalancer.server.port=5001
+      - traefik.http.routers.dockge.entrypoints=websecure
+      - traefik.http.routers.dockge.rule=Host(`${FQDN}`)
+
+networks:
+  proxy:
+    external: true

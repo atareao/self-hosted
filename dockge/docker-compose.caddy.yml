@@ -1,0 +1,11 @@
+services:
+  dockge:
+    networks:
+      - proxy
+    labels:
+      - caddy="${FQDN}"
+      - caddy.reverse_proxy="{{upstreams 5001}}"
+
+networks:
+  proxy:
+    external: true
