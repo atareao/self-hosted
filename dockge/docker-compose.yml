@@ -1,0 +1,16 @@
+services:
+  dockge:
+    image: louislam/dockge:1
+    container_name: dockge
+    restart: unless-stopped
+    init: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./stacks:/opt/stacks
+      - data:/app/data
+    environment:
+      - DOCKGE_STACKS_DIR=/opt/stacks
+      - DOCKGE_ENABLE_CONSOLE=true
+
+volumes:
+  data: {}
