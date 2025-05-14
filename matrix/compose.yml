@@ -1,0 +1,56 @@
+services:
+  element:
+    image: vectorim/element-web
+    container_name: element_web
+    restart: unless-stopped
+    #init: true
+    volumes:
+      - ./element_config.json:/app/config.json
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.element.loadbalancer.server.port=80
+      - traefik.http.routers.element.entrypoints=https
+      - traefik.http.routers.element.rule=Host(`element.tuservidor.es`)
+  conduit:
+    image: matrixconduit/matrix-conduit:latest
+    container_name: conduit
+    #init: true
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/matrix-conduit/
+    environment:
+      RUST_BACKTRACE: full
+      CONDUIT_SERVER_NAME: matrix.territoriolinux.es
+      CONDUIT_DATABASE_PATH: /var/lib/matrix-conduit/
+      CONDUIT_DATABASE_BACKEND: rocksdb
+      CONDUIT_PORT: 6167
+      CONDUIT_MAX_REQUEST_SIZE: 20_000_000 # in bytes, ~20 MB
+      CONDUIT_ALLOW_REGISTRATION: false
+      #CONDUIT_REGISTRATION_TOKEN: '' # require password for registration
+      CONDUIT_ALLOW_FEDERATION: true
+      CONDUIT_ALLOW_CHECK_FOR_UPDATES: true
+      CONDUIT_TRUSTED_SERVERS: '["matrix.org"]'
+      #CONDUIT_MAX_CONCURRENT_REQUESTS: 100
+      CONDUIT_ADDRESS: 0.0.0.0
+      CONDUIT_CONFIG: "" # Ignore this
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.conduit.loadbalancer.server.port=6167
+      - traefik.http.routers.conduit.entrypoints=https
+      - traefik.http.routers.conduit.rule=Host(`matrix.tuservidor.es`)
+      - traefik.http.routers.conduit.middlewares=cors-headers@docker
+      - traefik.http.middlewares.cors-headers.headers.accessControlAllowOriginList=*
+      - traefik.http.middlewares.cors-headers.headers.accessControlAllowHeaders=Origin,
+        X-Requested-With, Content-Type, Accept, Authorization
+      - traefik.http.middlewares.cors-headers.headers.accessControlAllowMethods=GET,
+        POST, PUT, DELETE, OPTIONS
+volumes:
+  db: {}
+networks:
+  proxy:
+    external: true
+
