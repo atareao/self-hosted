@@ -6,5 +6,5 @@ services:
     container_name: kanboard
     restart: unless-stopped
     volumes:
-      - ./kanboard_data:/bar/www/app/data
+      - ./kanboard_data:/var/www/app/data
       - ./kanboard_plugins:/var/www/app/plugins
