@@ -1,0 +1,43 @@
+services:
+  rustfs:
+    image: rustfs/rustfs
+    container_name: rustfs
+    restart: unless-stopped
+    init: true
+    volumes:
+      - data:/data
+    networks:
+      - proxy
+    environment:
+      RUSTFS_ACCESS_KEY: ${RUSTFS_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${RUSTFS_SECRET_KEY}
+      RUSTFS_CONSOLE_ENABLE: ${RUSTFS_CONSOLE_ENABLE}
+    healthcheck:
+      test:
+        - CMD
+        - sh
+        - -c
+        - curl -f http://localhost:9000/health && curl -f
+          http://localhost:9001/rustfs/console/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      traefik.enable: true
+      traefik.http.services.rustfs.loadbalancer.server.port: 9000
+      traefik.http.routers.rustfs.entrypoints: https
+      traefik.http.routers.rustfs.rule: Host(`${FQDN1}`)
+      traefik.http.routers.rustfs.service: rustfs
+      traefik.http.services.rustfs-console.loadbalancer.server.port: 9001
+      traefik.http.routers.rustfs-console.entrypoints: https
+      traefik.http.routers.rustfs-console.rule: Host(`${FQDN2}`)
+      traefik.http.routers.rustfs-console.service: rustfs-console
+volumes:
+  data: {}
+networks:
+  proxy:
+    external: true
+x-dockge:
+  urls:
+    - https://${FQDN2"}
