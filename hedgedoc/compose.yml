@@ -1,0 +1,56 @@
+service :
+  se logs -f
+
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: hedgedoc_mariadb
+    restart: always
+    volumes:
+      - data:/config
+    networks:
+      - internal
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Madrid
+  hedgedoc:
+    image: lscr.io/linuxserver/hedgedoc:latest
+    container_name: hedgedoc
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - config:/config
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_USER}
+      - DB_PORT=3306
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Madrid
+      - CMD_DOMAIN=localhost
+      - CMD_URL_ADDPORT=true #optional
+      - CMD_PROTOCOL_USESSL=false #optional
+      - CMD_PORT=3000 #optional
+    networks:
+      - internal
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.hedgedoc.loadbalancer.server.port=3080
+      - traefik.http.routers.hedgedoc-secure.entrypoints=https
+      - traefik.http.routers.hedgedoc-secure.rule=Host(`${FQDN}`)
+
+volumes:
+  data: {}
+  config: {}
+networks:
+  internal:
+  proxy:
+    external: true
