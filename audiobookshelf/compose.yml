@@ -1,0 +1,24 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    restart: unless-stopped
+    volumes:
+      - books:/books
+      - metadata:/metadata
+      - config:/config
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.services.audiobookshelf.loadbalancer.server.port: 80
+      traefik.http.routers.audiobookshelf.rule: Host(`${FQDN}`)
+      traefik.http.routers.audiobookshelf.entrypoints: https
+volumes:
+  books:
+    external: true
+  metadata: {}
+  config: {}
+networks:
+  proxy:
+    external: true
