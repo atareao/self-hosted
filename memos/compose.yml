@@ -1,4 +1,4 @@
-iservices:
+services:
   memos:
     image: neosmemo/memos:latest
     init: true
