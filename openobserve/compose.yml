@@ -1,0 +1,31 @@
+services:
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    container_name: openobserve
+    restart: always
+    environment:
+      RUST_LOG: warn
+      ZO_ROOT_USER_EMAIL: 
+      ZO_ROOT_USER_PASSWORD: 
+      ZO_COMPACT_DATA_RETENTION_DAYS: 30
+      ZO_DATA_DIR: /data
+    volumes:
+      - data:/data
+    networks:
+      - proxy
+      - networklog
+      - hookbridge
+    labels:
+      traefik.enable: true
+      traefik.http.services.dockerobserve.loadbalancer.server.port: 5080
+      traefik.http.routers.dockerobserve.entrypoints: https
+      traefik.http.routers.dockerobserve.rule: Host(`${FQDN}`)
+volumes:
+  data: {}
+networks:
+  networklog:
+    external: true
+  proxy:
+    external: true
+  hookbridge:
+    external: true
