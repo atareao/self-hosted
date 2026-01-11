@@ -19,8 +19,8 @@ services:
     container_name: croni
     configs:
       - source: croni
-      - target: /crontab.txt
-      - mode: "0444" 
+        target: /crontab.txt
+        mode: "0444" 
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
