@@ -1,0 +1,35 @@
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id
+    container_name: pocket-id
+    init: true
+    restart: unless-stopped
+    volumes:
+      - data:/app/data
+    environment:
+      APP_URL: https://${FQDN}
+      TRUST_PROXY: false
+      MAXMIND_LICENSE_KEY: ""
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      PUID: 1000
+      PGID: 1000
+    # Optional healthcheck
+    healthcheck:
+      test: curl -f http://localhost:1411/healthz
+      interval: 1m30s
+      timeout: 5s
+      retries: 2
+      start_period: 10s
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.services.pocketid.loadbalancer.server.port: 1411
+      traefik.http.routers.pocketid.entrypoints: https
+      traefik.http.routers.pocketid.rule: Host(`${FQDN}`)
+volumes:
+  data: {}
+networks:
+  proxy:
+    external: true
+
