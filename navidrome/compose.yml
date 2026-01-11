@@ -1,0 +1,24 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    init: true
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - music:/music:ro
+      - data:/data
+    labels:
+      traefik.enable: true
+      traefik.http.routers.navidrome.rule: Host(`${FQDN}`)
+      traefik.http.routers.navidrome.entrypoints: https
+networks:
+  proxy:
+    external: true
+volumes:
+  music: {}
+  data: {}
+x-dockge:
+  urls:
+    - https://${FQDN}
