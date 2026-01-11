@@ -1,0 +1,17 @@
+services:
+  pairdrop:
+    container_name: pairdrop
+    init: true
+    image: ghcr.io/schlagmichdoch/pairdrop
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.pairdrop.loadbalancer.server.port=3000
+      - traefik.http.routers.pairdrop.entrypoints=https
+      - traefik.http.routers.pairdrop.rule=Host(`${FQDN}`)
+
+networks:
+  proxy:
+    external: true
