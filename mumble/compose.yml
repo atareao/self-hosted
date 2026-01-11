@@ -1,0 +1,54 @@
+services:
+  mumble:
+    image: mumblevoip/mumble-server
+    container_name: mumble
+    restart: on-failure
+    init: true
+    environment:
+      #MUMBLE_CONFIG_SERVER_PASSWORD: ${SUPERUSER_PASSWORD}
+      MUMBLE_SUPERUSER_PASSWORD: ${SUPERUSER_PASSWORD}
+      MUMBLE_VERBOSE: true
+      MUMBLE_CONFIG_WELCOME_TEXT: Bienvenido
+      MUMBLE_CONFIG_OPUSTHRESHOLD: 0
+      MUMBLE_CONFIG_MESSAGEBURST: 1
+      MUMBLE_CONFIG_MESSAGELIMIT: 1
+      MUMBLE_CONFIG_USERS: 10
+      MUMBLE_CONFIG_BANDWIDTH: 512000
+      MUMBLE_CONFIG_SSLCERT: /certs/${FQDN}/cert.pem
+      MUMBLE_CONFIG_SSLKEY: /certs/${FQDN}/key.pem
+    volumes:
+      - certs:/certs
+      - data:/data
+    networks:
+      - proxy
+      - internal
+    labels:
+      traefik.enable: true
+      traefik.tcp.routers.mumble_tcp.entrypoints: mumble_tcp
+      traefik.tcp.routers.mumble_tcp.rule: HostSNI(`${FQDN}`)
+      traefik.tcp.routers.mumble_tcp.tls: true
+      traefik.tcp.routers.mumble_tcp.tls.certResolver: myresolver
+      traefik.tcp.routers.mumble_tcp.tls.passthrough: true
+      traefik.tcp.services.mumble_tcp.loadbalancer.server.port: 64738
+      traefik.udp.routers.mumble_udp.entrypoints: mumble_udp
+      traefik.udp.services.mumble_udp.loadbalancer.server.port: 64738
+  recorder:
+    image: kaffetorsk/mumble-recorder
+    container_name: recorder
+    restart: on-failure
+    init: true
+    environment:
+      SERVER: ${SERVER_IP}
+      PASSWORD: ""
+      FFMPEG_OUT: -c:v copy -c:a copy -f flv rtmp://127.0.0.1:1935/live/{name}
+    networks:
+      - internal
+volumes:
+  data: {}
+  certs:
+    external: true
+networks:
+  internal: {}
+  proxy:
+    external: true
+
