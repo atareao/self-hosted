@@ -1,0 +1,30 @@
+services:
+  miniflux-client:
+    image: atareao/miniflux-client:latest
+    container_name: miniflux-client
+    init: true
+    restart: unless-stopped
+    environment:
+      RUST_LOG: DEBUG
+      SLEEP_TIME: 43200
+      MINIFLUX_URL: ${MINIFLUX_URL}
+      MINIFLUX_TOKEN: ${MINIFLUX_TOKEN}
+      MINIFLUX_CATEGORIES: ${MINIFLUX_CATEGORIES}
+      MATRIX_URL: ${MATRIX_URL}
+      MATRIX_TOKEN: ${MATRIX_TOKEN}
+      MATRIX_ROOM: ${MATRIX_TOKEN}
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      TELEGRAM_THREAD_ID: ${TELEGRAM_THREAD_ID}
+      MODEL_URL: ${MODEL_URL}
+      MODEL_API_KEY: ${MODEL_API_KEY}
+      MODEL_NAME: ${MODEL_NAME}
+      MODEL_DESCRIPTION: Eres un asistente especializado en noticias internacionales
+      MODEL_PROMPT: 'Analiza todas las noticias proporcionadas y genera un JSON de la
+        siguiente forma: `{"news": [{"url": "<url>", "title": "<title>",
+        "summary": "<summary>"}]}`, reemplazando `<url>`, `<title>` y
+        `<summary>` por la url, el título traducido al español y un resumen
+        explicando la noticia en español. Tiene que ir todo en una única línea.
+        No indiques que me devuelves un JSON, simplemente devuelve el JSON como
+        te indiqué.'
+
