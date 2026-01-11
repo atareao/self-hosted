@@ -1,0 +1,32 @@
+services:
+  podmixer:
+    image: atareao/podmixer:v0.2.0
+    container_name: podmixer
+    restart: unless-stopped
+    init: true
+    networks:
+      - proxy
+    volumes:
+      - db:/app/db
+      - rss:/app/rss
+    environment:
+      RUST_LOG: info
+      RUST_BACKTRACE: full
+      RUST_ENV: production
+      DB_URL: /app/db/podmixer.db
+      PORT: 3000
+      SECRET: ${SECRET}
+      SLEEP_TIME: 900
+      OLDER_THAN: 30
+    labels:
+      traefik.enable: true
+      traefik.http.services.podmixer2.loadbalancer.server.port: 3000
+      traefik.http.routers.podmixer2.rule: Host(`${FQDN}`)
+      traefik.http.routers.podmixer2.entrypoints: https
+volumes:
+  db: {}
+  rss: {}
+networks:
+  proxy:
+    external: true
+
