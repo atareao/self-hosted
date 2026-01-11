@@ -18,7 +18,7 @@ services:
     init: true
     container_name: croni
     configs:
-      - source: config
+      - source: croni
       - target: /crontab.txt
       - mode: "0444" 
     volumes:
