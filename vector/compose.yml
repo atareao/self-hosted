@@ -1,0 +1,117 @@
+services:
+  vector:
+    image: timberio/vector:latest-alpine
+    container_name: vector
+    restart: unless-stopped
+    init: true
+    environment:
+      VECTOR_LOG: warn
+    configs:
+      - source: vector
+        target: /etc/vector/vector.yaml
+        mode: "0400"
+    volumes:
+      - traefik_logs:/traefik_logs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - geoip:/geoip_db
+    networks:
+      - networklog
+      - monitoring
+volumes:
+  traefik_logs:
+    external: true
+  geoip:
+    external: true
+networks:
+  networklog:
+    external: true
+  monitoring:
+    external: true
+configs:
+  vector:
+    content: >
+      api:
+        enabled: true
+        address: "0.0.0.0:8686"
+      enrichment_tables:
+        geoip_city:
+          type: "geoip"
+          path: "/geoip_db/GeoLite2-City.mmdb"
+      sources:
+        docker_logs:
+          type: "docker_logs"
+          exclude_containers:
+            - den
+            - openobserve
+            - sorteabot
+        traefik_logs:
+          type: file
+          max_line_bytes: 2097152
+          include:
+            - /traefik_logs/traefik.log
+        traefik_access_logs:
+          type: file
+          max_line_bytes: 2097152
+          include:
+            - /traefik_logs/access.log
+      transforms:
+        access_logs:
+          type: "remap"
+          inputs:
+            - traefik_access_logs # Conecta esta transformación a tu source de logs
+          source: |-
+            . = parse_json!(string!(.message))
+            .geoip = get_enrichment_table_record!(table: "geoip_city", condition: { "ip": .ClientHost })
+            parsed_time = parse_timestamp!(.StartUTC, format: "%Y-%m-%dT%H:%M:%S.%9fZ")
+            .timestamp_ms = to_unix_timestamp(parsed_time, unit: "microseconds")
+            ._timestamp = .timestamp_ms
+            .weight = 1
+            ._msg = join!([.RequestAddr, .RequestMethod, .RequestPath])
+      sinks:
+        openobserve_docker:
+          type: "http"
+          inputs:
+            - docker_logs
+          uri: "http://openobserve:5080/api/default/docker_logs/_json"
+          method: "post"
+          auth:
+            strategy: "basic"
+            user: "${OO_USER}"
+            password: "${OO_PASS}"
+          compression: "gzip"
+          encoding:
+            codec: "json"
+            timestamp_format: "rfc3339"
+          healthcheck:
+            enabled: false
+        openobserve_traefik:
+          type: "http"
+          inputs: ["traefik_logs"]
+          uri: "http://openobserve:5080/api/default/traefik_logs/_json"
+          method: "post"
+          auth:
+            strategy: "basic"
+            user: "${OO_USER}"
+            password: "${OO_PASS}"
+          compression: "gzip"
+          encoding:
+            codec: "json"
+            timestamp_format: "rfc3339"
+          healthcheck:
+            enabled: false
+        openobserve_access:
+          type: "http"
+          inputs: ["access_logs"]
+          uri: "http://openobserve:5080/api/default/access_logs/_json"
+          method: "post"
+          auth:
+            strategy: "basic"
+            user: "${OO_USER}"
+            password: "${OO_PASS}"
+          compression: "gzip"
+          encoding:
+            codec: "json"
+            timestamp_format: "rfc3339"
+          healthcheck:
+            enabled: false
+
