@@ -1,0 +1,24 @@
+services:
+  gokapi:
+    image: f0rc3/gokapi:latest
+    container_name: gokapi
+    restart: unless-stopped
+    volumes:
+      - config:/app/config
+      - data:/app/data
+    networks:
+      - proxy
+    environment:
+      GOKAPI_PORT: ${PORT}
+      GOKAPI_EXTERNAL_URL: https://${FQDN}
+    labels:
+      traefik.enable: true
+      traefik.http.services.gokapi.loadbalancer.server.port: ${PORT}
+      traefik.http.routers.gokapi.entrypoints: https
+      traefik.http.routers.gokapi.rule: Host(`${FQDN}`)
+volumes:
+  config: {}
+  data: {}
+networks:
+  proxy:
+    external: true
