@@ -1,0 +1,27 @@
+services:
+  memcached:
+    image: memcached
+    container_name: memcached
+    init: true
+    restart: unless-stopped
+    networks:
+      - internal
+  yopass:
+    image: jhaals/yopass
+    container_name: yopass
+    init: true
+    command: --memcached=memcached:11211 --port 80
+    restart: unless-stopped
+    networks:
+      - internal
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.yopass.loadbalancer.server.port=80
+      - traefik.http.routers.yopass.rule=Host(`${FQDN}`)
+      - traefik.http.routers.yopass.entrypoints=https
+networks:
+  internal: {}
+  proxy:
+    external: true
+
