@@ -1,0 +1,45 @@
+services:
+  wakapi:
+    image: ghcr.io/muety/wakapi:latest
+    container_name: wakapi
+    init: true
+    restart: unless-stopped
+    environment:
+      WAKAPI_DB_TYPE: postgres
+      WAKAPI_DB_NAME: ${WAKAPI_DB_NAME}
+      WAKAPI_DB_USER: ${WAKAPI_DB_USER}
+      WAKAPI_DB_PASSWORD: ${WAKAPI_DB_PASSWORD}
+      WAKAPI_DB_HOST: db
+      WAKAPI_DB_PORT: "5432"
+      WAKAPI_ALLOW_SIGNUP: false
+    volumes:
+      - wakapi:/data
+    networks:
+      - proxy
+      - internal
+    labels:
+      traefik.enable: true
+      traefik.http.services.wakapi.loadbalancer.server.port: 3000
+      traefik.http.routers.wakapi.rule: Host(`${FQDN}`)
+      traefik.http.routers.wakapi.entrypoints: https
+  db:
+    image: postgres:17
+    container_name: wakapi_db
+    init: true
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${WAKAPI_DB_NAME}
+      POSTGRES_USER: ${WAKAPI_DB_USER}
+      POSTGRES_PASSWORD: ${WAKAPI_DB_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - internal
+volumes:
+  wakapi: {}
+  pg_data: {}
+networks:
+  internal: {}
+  proxy:
+    external: true
+
