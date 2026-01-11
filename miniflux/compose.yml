@@ -1,0 +1,66 @@
+services:
+  miniflux:
+    image: miniflux/miniflux:latest
+    container_name: miniflux
+    restart: unless-stopped
+    init: true
+    depends_on:
+      miniflux_db:
+        condition: service_healthy
+    networks:
+      - internal
+      - proxy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@miniflux_db/miniflux?sslmode=disable
+      RUN_MIGRATIONS: $RUN_MIGRATIONS
+      CREATE_ADMIN: $CREATE_ADMIN
+      ADMIN_USERNAME: $ADMIN_USERNAME
+      ADMIN_PASSWORD: $ADMIN_PASSWORD
+    labels:
+      traefik.enable: true
+      traefik.http.services.miniflux.loadbalancer.server.port: 8080
+      traefik.http.routers.miniflux.rule: Host(`${FQDN1}`)
+      traefik.http.routers.miniflux.entrypoints: https
+      traefik.http.routers.miniflux.middlewares: my-geoblock@file
+  reactflux:
+    image: electh/reactflux
+    container_name: reactflux
+    restart: unless-stopped
+    init: true
+    depends_on:
+      miniflux:
+        condition: service_started
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.services.reactflux.loadbalancer.server.port: 2000
+      traefik.http.routers.reactflux.rule: Host(`${FQDN2}`)
+      traefik.http.routers.reactflux.entrypoints: https
+      traefik.http.routers.reactflux.middlewares: my-geoblock@file
+  miniflux_db:
+    image: postgres:18-alpine
+    container_name: miniflux_db
+    restart: unless-stopped
+    init: true
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - -U
+        - miniflux
+      interval: 30s
+      start_period: 30s
+volumes:
+  data: {}
+networks:
+  internal: {}
+  proxy:
+    external: true
