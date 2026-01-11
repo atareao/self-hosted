@@ -1,7 +1,0 @@
-services:
-  notemark:
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.notemark.loadbalancer.server.port=8000
-      - traefik.http.routers.notemark.rule=Host(`${FQDN}`)
-      - traefik.http.routers.notemark.entrypoints=https
