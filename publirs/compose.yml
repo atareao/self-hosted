@@ -29,7 +29,8 @@ services:
 
 volumes:
   db: {}
-config:
+
+configs:
   croni:
     content: |
       0 0,6,12,18 * * * curl http://publirs:8080/api/v1/status >> /proc/1/fd/1
