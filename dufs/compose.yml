@@ -1,0 +1,45 @@
+services:
+  dufs:
+    image: sigoden/dufs
+    container_name: dufs
+    restart: unless-stopped
+    init: true
+    volumes:
+      - data:/data
+    networks:
+      - proxy
+    environment:
+      DUFS_SERVE_PATH: /data
+      # DUFS_CONFIG: config.yaml
+      # DUFS_BIND: 0.0.0.0
+      # DUFS_PORT: 5000
+      # DUFS_PATH_PREFIX: /dufs
+      DUFS_HIDDEN: tmp,*.log,*.lock
+      DUFS_AUTH: $DUFS_AUTH
+      DUFS_ALLOW_ALL: true
+      DUFS_ALLOW_UPLOAD: true
+      DUFS_ALLOW_DELETE: true
+      DUFS_ALLOW_SEARCH: true
+      DUFS_ALLOW_SYMLINK: true
+      DUFS_ALLOW_ARCHIVE: true
+      # DUFS_ENABLE_CORS: true
+      # DUFS_RENDER_INDEX: true
+      # DUFS_RENDER_TRY_INDEX: true
+      # DUFS_RENDER_SPA: true
+      # DUFS_ASSETS: ./assets
+      # DUFS_LOG_FORMAT: ""
+      # DUFS_LOG_FILE: ./dufs.log
+      # DUFS_COMPRESS: low
+      # DUFS_TLS_CERT: cert.pem
+      # DUFS_TLS_KEY: key.pem
+
+    labels:
+      traefik.enable: true
+      traefik.http.services.dufs.loadbalancer.server.port: 5000
+      traefik.http.routers.dufs.entrypoints: https
+      traefik.http.routers.dufs.rule: Host(`${FQDN}`)
+volumes:
+  data: {}
+networks:
+  proxy:
+    external: true
