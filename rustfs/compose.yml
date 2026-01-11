@@ -38,6 +38,3 @@ volumes:
 networks:
   proxy:
     external: true
-x-dockge:
-  urls:
-    - https://${FQDN2"}
