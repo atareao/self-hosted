@@ -6,7 +6,7 @@ services:
     configs:
       - source: element
         target: /app/config.json
-        mode: "0660"
+        mode: "0666"
     networks:
       - proxy
     labels:
