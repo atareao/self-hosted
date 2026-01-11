@@ -1,4 +1,4 @@
-ervices:
+services:
   microbin:
     image: danielszabo99/microbin:latest
     container_name: microbin
