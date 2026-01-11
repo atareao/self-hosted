@@ -1,0 +1,26 @@
+services:
+  opengist:
+    restart: unless-stopped
+    image: ghcr.io/thomiceli/opengist:latest
+    container_name: opengist
+    init: true
+    volumes:
+      - data:/opengist
+    environment:
+      UID: 1000
+      GID: 1000
+      OG_GITEA_CLIENT_KEY: ${OG_GITEA_CLIENT_KEY}
+      OG_GITEA_SECRET: ${OG_GITEA_SECRET}
+      OG_GITEA_URL: ${OG_GITEA_URL}
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.gist.loadbalancer.server.port=6157
+      - traefik.http.routers.gist.rule=Host(`${FQDN}`)
+      - traefik.http.routers.gist.entrypoints=https
+networks:
+  proxy:
+    external: true
+volumes:
+  data: {}
