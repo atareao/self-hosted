@@ -3,7 +3,6 @@ services:
     image: atareao/custom-code-server
     container_name: code-server
     restart: unless-stopped
-    init: true
     environment:
       - PUID=1000
       - PGID=1000
