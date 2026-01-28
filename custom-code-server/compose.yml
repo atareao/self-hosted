@@ -1,0 +1,32 @@
+services:
+  code-server:
+    image: atareao/custom-code-server
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - AUTH=none # Seguridad gestionada por Pocket ID en el borde (Traefik)
+      - DEFAULT_WORKSPACE=/config/workspace
+    volumes:
+      - code_server_data:/config # Aquí van las extensiones y configuración de VS Code
+      - code_server_workspace:/config/workspace # Aquí es donde desarrollarás tus proyectos
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.code-server.rule: Host(`${FQDN}`)
+      traefik.http.routers.code-server.entrypoints: https
+      # Middleware de Pocket ID (Forward Auth)
+      traefik.http.routers.code-server.middlewares: oidc-auth@file,my-geoblock@file
+      traefik.http.services.code-server.loadbalancer.server.port: 8443
+
+volumes:
+  code_server_data:
+  code_server_workspace:
+
+networks:
+  proxy:
+    external: true
+
