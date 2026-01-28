@@ -1,7 +1,7 @@
 services:
-  code-server:
+  custom-code-server:
     image: atareao/custom-code-server
-    container_name: code-server
+    container_name: custom-code-server
     restart: unless-stopped
     environment:
       - PUID=1000
