@@ -2,6 +2,8 @@ services:
   code-server:
     image: atareao/custom-code-server
     container_name: code-server
+    restart: unless-stopped
+    init: true
     environment:
       - PUID=1000
       - PGID=1000
@@ -11,7 +13,6 @@ services:
     volumes:
       - code_server_data:/config # Aquí van las extensiones y configuración de VS Code
       - code_server_workspace:/config/workspace # Aquí es donde desarrollarás tus proyectos
-    restart: unless-stopped
     networks:
       - proxy
     labels:
