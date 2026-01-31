@@ -1,0 +1,24 @@
+services:
+  storyteller:
+    image: registry.gitlab.com/storyteller-platform/storyteller:latest
+    container_name: storyteller
+    restart: unless-stopped
+    init: true
+    volumes:
+      - data:/data:rw
+    environment:
+      STORYTELLER_SECRET_KEY: "${STORYTELLER_SECRET_KEY}"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.storyteller.rule: Host(`${FQDN}`)
+      traefik.http.routers.storyteller.entrypoints: https
+      traefik.http.routers.storyteller.middlewares: oidc-auth@file,my-geoblock@file
+      traefik.http.services.storyteller.loadbalancer.server.port: 8001
+
+volumes:
+  data: {}
+
+networks:
+  proxy:
+    external: true
+
