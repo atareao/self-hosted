@@ -8,6 +8,7 @@ services:
       - PGID=1000
       - TZ=Europe/Madrid
       - AUTH=none # Seguridad gestionada por Pocket ID en el borde (Traefik)
+      - DOCKER_USER=abc
       - DEFAULT_WORKSPACE=/config/workspace
     volumes:
       - code_server_data:/config # Aquí van las extensiones y configuración de VS Code
