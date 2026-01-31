@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     volumes:
       - data:/data:rw
+    networks:
+      - proxy
     environment:
       STORYTELLER_SECRET_KEY: "${STORYTELLER_SECRET_KEY}"
     labels:
