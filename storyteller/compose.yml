@@ -3,7 +3,6 @@ services:
     image: registry.gitlab.com/storyteller-platform/storyteller:latest
     container_name: storyteller
     restart: unless-stopped
-    init: true
     volumes:
       - data:/data:rw
     environment:
