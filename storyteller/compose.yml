@@ -11,7 +11,7 @@ services:
       traefik.enable: true
       traefik.http.routers.storyteller.rule: Host(`${FQDN}`)
       traefik.http.routers.storyteller.entrypoints: https
-      traefik.http.routers.storyteller.middlewares: oidc-auth@file,my-geoblock@file
+      traefik.http.routers.storyteller.middlewares: my-geoblock@file
       traefik.http.services.storyteller.loadbalancer.server.port: 8001
 
 volumes:
