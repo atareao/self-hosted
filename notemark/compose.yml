@@ -15,7 +15,7 @@ services:
       ALLOW_SIGNUP: false
     labels:
       traefik.enable: true
-      traefik.http.services.notemark.loadbalancer.server.port: 8000
+      traefik.http.services.notemark.loadbalancer.server.port: 8080
       traefik.http.routers.notemark.rule: Host(`${FQDN}`)
       traefik.http.routers.notemark.entrypoints: https
 
