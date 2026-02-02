@@ -13,6 +13,7 @@ services:
       CORS_ORIGINS: "https://${FQDN}"
       PUBLIC_URL: "https://${FQDN}"
       ALLOW_SIGNUP: false
+      ENABLE_INTERNAL_SIGNUP: false
     labels:
       traefik.enable: true
       traefik.http.services.notemark.loadbalancer.server.port: 8080
