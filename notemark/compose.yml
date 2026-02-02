@@ -11,6 +11,7 @@ services:
     environment:
       JWT_SECRET: "${JWT_SECRET}"
       CORS_ORIGINS: "https://${FQDN}"
+      PUBLIC_URL: "https://${FQDN}"
       ALLOW_SIGNUP: false
     labels:
       traefik.enable: true
