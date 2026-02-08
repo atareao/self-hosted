@@ -1,0 +1,71 @@
+services:
+  pinepods_db:
+    image: postgres:17
+    container_name: pinepods_db
+    environment:
+      POSTGRES_DB: pinepods_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  pinepods_valkey:
+    image: valkey/valkey:8-alpine
+    restart: always
+
+  pinepods:
+    image: madeofpendletonwool/pinepods:latest
+    container_name: pinepods
+    restart: unless-stopped
+    init: true
+    depends_on:
+      - pinepods_db
+      - pinepods_valkey
+    volumes:
+      # Mount the download and backup locations on the server
+      - downloads:/opt/pinepods/downloads
+      - backups:/opt/pinepods/backups
+      # Timezone volumes, HIGHLY optional. Read the timezone notes below
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - internal
+      - proxy
+    environment:
+      # Basic Server Info
+      SEARCH_API_URL: 'https://search.pinepods.online/api/search'
+      PEOPLE_API_URL: 'https://people.pinepods.online'
+      HOSTNAME: 'https://{FQDN}'
+      # Database Vars
+      DB_TYPE: postgresql
+      DB_HOST: pinepods_db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: pinepods_database
+      # Valkey Settings
+      VALKEY_HOST: pinepods_valkey
+      VALKEY_PORT: 6379
+      # Enable or Disable Debug Mode for additional Printing
+      DEBUG_MODE: false
+      PUID: ${UID:-911}
+      PGID: ${GID:-911}
+      # Add timezone configuration
+      TZ: "Europe/Madrid"
+    labels:
+      traefik.enable: true
+      traefik.http.services.pinepods.loadbalancer.server.port: 8040
+      traefik.http.routers.pinepods.rule: Host(`${FQDN}`)
+      traefik.http.routers.pinepods.entrypoints: https
+
+volumes:
+  downloads: {}
+  backups: {}
+  pgdata: {}
+
+networks:
+  internal: {}
+  proxy:
+    external: true
