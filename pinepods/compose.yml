@@ -2,18 +2,25 @@ services:
   pinepods_db:
     image: postgres:17
     container_name: pinepods_db
+    restart: always
+    init: true
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
     environment:
       POSTGRES_DB: pinepods_database
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    restart: always
 
   pinepods_valkey:
     image: valkey/valkey:8-alpine
+    container_name: pinepods_valkey
     restart: always
+    init: true
+    networks:
+      - internal
 
   pinepods:
     image: madeofpendletonwool/pinepods:latest
