@@ -5,7 +5,7 @@ services:
     init: true
     restart: unless-stopped
     environment:
-      MATRIX_ROOM: ${MATRIX_TOKEN}
+      MATRIX_ROOM: ${MATRIX_ROOM}
       MATRIX_TOKEN: ${MATRIX_TOKEN}
       MATRIX_URL: ${MATRIX_URL}
       MAX_ENTRIES: ${MAX_ENTRIES}
