@@ -245,3 +245,15 @@ Puedes seguir los logs con `docker compose logs -f`. Algunas carpetas usan `comp
 ## Licencia
 
 Distribuido bajo licencia MIT. Consulta [LICENSE.md](./LICENSE.md) para más detalles.
+
+## Autor
+
+👤 **Lorenzo Carbonell** — [@atareao](https://github.com/atareao)
+
+Mantengo este repositorio junto al blog [atareao.es](https://atareao.es), donde voy documentando muchos de estos servicios.
+
+- 📝 Blog: [atareao.es](https://atareao.es)
+- 🎙️ Podcast: [atareao.es/podcast](https://atareao.es/podcast/)
+- 📺 YouTube: [@atareao](https://www.youtube.com/@atareao)
+
+Si este repositorio te resulta útil, una ⭐️ ayuda a que más gente lo encuentre.
